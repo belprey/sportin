@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#22b573">
+<meta name="referrer" content="no-referrer">
+<title>Sportín — Cuidado personal</title>
+<style>
+:root{
+  --primary:#22b573; --primary-dark:#149a5a; --accent:#ff6b35;
+  --ok:#22b573; --warn:#f0a020; --danger:#e5484d;
+  --bg:#eef7f2; --surface:#fff; --text:#16223a; --muted:#6b7a90;
+  --line:#dbe9e1; --shadow:0 8px 30px rgba(22,34,58,.10); --r:18px;
+  --agua:#2ea8e0; --agua-dark:#1a86b8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100dvh;max-width:820px;margin:0 auto;position:relative}
+.topbar{display:flex;align-items:center;gap:8px;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);z-index:20;flex:none}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border:none;
+  border-radius:13px;background:#eef6f0;color:var(--text);font-size:18px;cursor:pointer;
+  transition:.15s;flex:none}
+.icon-btn:active{transform:scale(.92)}
+.brand{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:800;font-size:16px}
+.brand svg{width:26px;height:32px}
+.badge-rol{font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px;
+  background:#dbf3e5;color:var(--primary-dark);letter-spacing:.3px;text-transform:uppercase}
+.views{flex:1;overflow-y:auto;position:relative}
+.view{display:none;padding:14px 14px 24px;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.h1{font-size:20px;margin:4px 0 4px;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.45}
+.card{background:var(--surface);border-radius:var(--r);padding:16px;
+  box-shadow:var(--shadow);margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:15px;letter-spacing:-.2px;
+  display:flex;align-items:center;gap:8px;justify-content:space-between}
+.card h3 .h3-actions{display:flex;gap:6px}
+.card h3 .h3-btn{background:#eef6f0;border:none;border-radius:8px;
+  padding:5px 9px;font-size:12px;font-weight:700;color:var(--primary-dark);
+  cursor:pointer;font-family:inherit;transition:.15s}
+.card h3 .h3-btn:active{transform:scale(.95)}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.4}
+.empty{text-align:center;color:var(--muted);font-size:13.5px;padding:24px 12px;line-height:1.5}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.pill.ok{background:#dbf3e5;color:#149a5a}
+.pill.warn{background:#fef3dd;color:#a76a00}
+.pill.danger{background:#fde9e9;color:#c92c32}
+.pill.info{background:#dbf0f7;color:#1a86b8}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 18px;border:none;border-radius:14px;font-family:inherit;
+  font-size:14.5px;font-weight:700;cursor:pointer;transition:.15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;box-shadow:0 8px 20px rgba(34,181,115,.3);width:100%}
+.btn-secondary{background:#eef6f0;color:var(--text)}
+.btn-danger{background:#fdecec;color:var(--danger)}
+.btn-mini{padding:6px 11px;font-size:12.5px;border-radius:10px;width:auto}
+
+/* ==== AGUA ==== */
+.agua-hero{background:linear-gradient(135deg,#2ea8e0,#1a86b8);color:#fff;
+  border-radius:var(--r);padding:22px 20px;text-align:center;
+  box-shadow:0 12px 30px rgba(46,168,224,.3);margin-bottom:14px}
+.agua-ring{position:relative;width:170px;height:170px;margin:0 auto 12px}
+.agua-ring svg{transform:rotate(-90deg)}
+.agua-ring .ring-bg{fill:none;stroke:rgba(255,255,255,.22);stroke-width:12}
+.agua-ring .ring-fg{fill:none;stroke:#fff;stroke-width:12;stroke-linecap:round;
+  transition:stroke-dashoffset .5s ease}
+.agua-ring .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;line-height:1.05}
+.agua-ring .ring-center b{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+.agua-ring .ring-center small{font-size:12px;opacity:.85;font-weight:600;margin-top:2px}
+.agua-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.agua-btn{background:rgba(255,255,255,.22);border:none;color:#fff;
+  padding:11px 16px;border-radius:12px;font-family:inherit;font-weight:700;
+  font-size:14px;cursor:pointer;transition:.15s;min-width:82px}
+.agua-btn:active{transform:scale(.95)}
+.agua-btn.primary{background:#fff;color:var(--agua-dark)}
+.agua-btn.neg{background:rgba(255,255,255,.12);font-size:12px;padding:8px 12px;min-width:0}
+.agua-semana{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:6px;height:100px;margin-top:6px}
+.agua-dia{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.agua-dia .bar{width:100%;background:#dbe9e1;border-radius:6px;position:relative;overflow:hidden}
+.agua-dia .bar > i{position:absolute;left:0;right:0;bottom:0;background:var(--agua);transition:height .4s}
+.agua-dia.lleno .bar > i{background:var(--primary)}
+.agua-dia .lbl{font-size:10px;color:var(--muted);font-weight:700}
+.agua-dia .ml{font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ==== COMIDAS ==== */
+.comida-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.comida-card{background:var(--surface);border-radius:14px;padding:14px;
+  box-shadow:var(--shadow);cursor:pointer;transition:.15s;border-left:5px solid var(--primary)}
+.comida-card:active{transform:scale(.98)}
+.comida-card.vacio{border-left-color:var(--line)}
+.comida-card h4{margin:0 0 6px;font-size:14px;letter-spacing:-.2px;
+  display:flex;align-items:center;gap:6px}
+.comida-card .em{font-size:20px}
+.comida-card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.comida-card .meta{font-size:10.5px;color:var(--muted);margin-top:6px;
+  display:flex;gap:6px;flex-wrap:wrap}
+.comida-card.vacio p{font-style:italic;opacity:.7}
+
+/* ==== MOVIMIENTO ==== */
+.mov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.mov-tipo{background:#f4faf6;border:1px solid var(--line);border-radius:14px;
+  padding:12px 8px;text-align:center;cursor:pointer;transition:.15s;font-family:inherit}
+.mov-tipo:active{transform:scale(.95)}
+.mov-tipo .em{font-size:22px;display:block;margin-bottom:4px}
+.mov-tipo strong{font-size:11.5px;font-weight:700;color:var(--text)}
+.mov-lista{margin-top:4px}
+.mov-item{display:flex;align-items:center;gap:12px;padding:11px 0;
+  border-bottom:1px solid var(--line)}
+.mov-item:last-child{border-bottom:none}
+.mov-item .em{font-size:22px;flex:none;width:32px;text-align:center}
+.mov-item .info{flex:1;min-width:0}
+.mov-item .info strong{font-size:14px;display:block;margin-bottom:2px}
+.mov-item .info small{font-size:11.5px;color:var(--muted)}
+.mov-item .del{background:none;border:none;color:var(--danger);font-size:15px;cursor:pointer;padding:4px;flex:none}
+
+/* ==== MINDFULNESS ==== */
+.mind-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.mind-card{background:#fff;border-radius:16px;padding:16px;
+  box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;
+  cursor:pointer;transition:.15s;border-left:5px solid var(--primary)}
+.mind-card:active{transform:scale(.99)}
+.mind-card.blue{border-left-color:var(--agua)}
+.mind-card.orange{border-left-color:var(--accent)}
+.mind-card.purple{border-left-color:#9b59b6}
+.mind-ico{font-size:28px;flex:none;line-height:1;width:38px;text-align:center}
+.mind-body{flex:1;min-width:0}
+.mind-body h3{margin:0 0 4px;font-size:14.5px;letter-spacing:-.2px}
+.mind-body p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.4}
+.mind-body small{display:block;margin-top:6px;font-size:11px;
+  color:var(--primary-dark);font-weight:700}
+
+/* ==== OVERLAY RESPIRACIÓN ==== */
+.breath-overlay{position:fixed;inset:0;background:#0b1a14;color:#e6f5ec;z-index:200;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 20px);
+  overflow:hidden}
+.breath-overlay.show{display:flex}
+.breath-top{position:absolute;top:calc(env(safe-area-inset-top) + 16px);left:16px;right:16px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:2}
+.breath-top .btitle{font-size:13px;color:#8fc2a8;font-weight:700;letter-spacing:.3px}
+.breath-top .bclose{background:rgba(255,255,255,.1);color:#e6f5ec;border:none;
+  padding:9px 14px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700}
+.breath-stage{position:relative;width:min(72vw,320px);height:min(72vw,320px);
+  display:flex;align-items:center;justify-content:center;margin-bottom:30px}
+.breath-circle{position:absolute;width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,rgba(34,181,115,.55),rgba(34,181,115,.15));
+  border:2px solid rgba(34,181,115,.6);
+  transform:scale(.6);transition:transform linear;
+  box-shadow:0 0 80px rgba(34,181,115,.4)}
+.breath-stage .b-text{position:relative;z-index:2;text-align:center;pointer-events:none}
+.breath-stage .b-fase{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
+.breath-stage .b-cont{font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;
+  line-height:1;letter-spacing:-2px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.breath-info{text-align:center;font-size:13px;color:#8fc2a8;line-height:1.5;max-width:340px}
+.breath-info strong{color:#e6f5ec;display:block;margin-bottom:2px}
+.breath-controls{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.breath-controls button{background:rgba(255,255,255,.12);color:#e6f5ec;border:none;
+  padding:12px 22px;border-radius:12px;font-family:inherit;font-weight:700;
+  font-size:14px;cursor:pointer;transition:.15s}
+.breath-controls button:active{transform:scale(.95)}
+.breath-controls button.primary{background:linear-gradient(135deg,#22b573,#149a5a);color:#fff;
+  box-shadow:0 8px 22px rgba(34,181,115,.4)}
+
+/* ==== COMPRAS ==== */
+.compra-cat{margin-bottom:14px}
+.compra-cat h4{margin:0 0 8px;font-size:12.5px;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--muted);font-weight:800;
+  display:flex;align-items:center;gap:6px;justify-content:space-between}
+.compra-cat h4 span.n{font-size:10.5px;background:#eef6f0;color:var(--muted);
+  padding:2px 7px;border-radius:99px}
+.compra-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:#fff;border-radius:12px;margin-bottom:6px;box-shadow:0 2px 8px rgba(22,34,58,.05)}
+.compra-item.comprado{opacity:.55}
+.compra-item.comprado .txt{text-decoration:line-through}
+.compra-item .chk{width:24px;height:24px;border:2px solid var(--line);border-radius:8px;
+  background:#fff;cursor:pointer;flex:none;display:grid;place-items:center;
+  color:#fff;font-size:14px;transition:.15s}
+.compra-item.comprado .chk{background:var(--primary);border-color:var(--primary)}
+.compra-item.comprado .chk::after{content:"✓"}
+.compra-item .txt{flex:1;min-width:0;font-size:14px;line-height:1.35}
+.compra-item .del{background:none;border:none;color:var(--danger);font-size:15px;cursor:pointer;padding:4px;flex:none}
+
+/* ==== RACHAS ==== */
+.racha-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.racha-card{background:#fff;border-radius:16px;padding:16px;
+  box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden}
+.racha-card .fire{font-size:34px;line-height:1;margin-bottom:4px;display:block}
+.racha-card b{display:block;font-size:34px;font-weight:800;line-height:1;
+  color:var(--primary-dark);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.racha-card small{display:block;font-size:11.5px;color:var(--muted);margin-top:5px;
+  text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.racha-card.cold b{color:var(--muted)}
+.racha-card .best{font-size:10.5px;color:var(--muted);margin-top:6px}
+
+/* ==== AJUSTES / LEGAL ==== */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.field input[type=text],.field input[type=number],.field input[type=date],
+.field textarea,.field select{width:100%;padding:11px 13px;
+  border:1px solid var(--line);border-radius:12px;font-family:inherit;font-size:14.5px;
+  background:#f6faf7;outline:none;transition:.15s}
+.field textarea{resize:vertical;min-height:70px;line-height:1.4}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary);background:#fff}
+.switch-row{display:flex;align-items:center;justify-content:space-between;
+  padding:11px 0;border-bottom:1px solid var(--line);gap:12px}
+.switch-row:last-child{border-bottom:none}
+.switch-row span{font-size:14px;font-weight:600;flex:1;min-width:0}
+.switch-row .sub-txt{font-size:11.5px;color:var(--muted);display:block;margin-top:2px;font-weight:400;line-height:1.4}
+.switch{position:relative;width:48px;height:28px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#cdd8e8;border-radius:99px;cursor:pointer;transition:.2s}
+.slider::before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;
+  background:#fff;border-radius:50%;transition:.2s;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.switch input:checked + .slider{background:var(--primary)}
+.switch input:checked + .slider::before{transform:translateX(20px)}
+.legal-box{background:#f0f7ff;border:1px solid #c5ddf5;border-radius:12px;
+  padding:14px;margin-bottom:12px;font-size:12.5px;line-height:1.55;color:#1a3a5c}
+.legal-box strong{color:#0d2a45}
+.legal-box ul{margin:6px 0 0;padding-left:20px}
+.hash-chip{font-family:ui-monospace,monospace;font-size:10px;color:var(--primary-dark);
+  background:#dbf3e5;padding:2px 6px;border-radius:6px}
+.audit-log{padding:10px 12px;background:#f6faf7;border-radius:10px;margin-bottom:6px;
+  font-size:12px;color:var(--muted);display:flex;justify-content:space-between;
+  align-items:center;gap:10px;border:1px solid var(--line)}
+
+/* ==== SHEETS ==== */
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);
+  width:100%;max-width:520px;max-height:88dvh;background:#fff;
+  border-radius:26px 26px 0 0;z-index:60;transition:transform .32s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -10px 40px rgba(16,26,45,.2)}
+.sheet.show{transform:translate(-50%,0)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 12px;border-bottom:1px solid var(--line);flex:none}
+.sheet-head h2{margin:0;font-size:17px}
+.sheet-body{padding:16px 18px 26px;overflow-y:auto}
+.sheet-actions{display:flex;gap:8px;margin-top:8px}
+.sheet-actions .btn{flex:1}
+
+/* ==== COMIDAS QUICK ==== */
+.quick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.quick-chip{border:1px solid var(--line);background:#fff;color:var(--text);
+  padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:inherit}
+.quick-chip:active{transform:scale(.95)}
+.quick-chip:hover{border-color:var(--primary);color:var(--primary)}
+.scale-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.scale-row .lbl{flex:1;font-size:13.5px;font-weight:600}
+.scale{display:flex;gap:4px}
+.scale button{width:32px;height:32px;border:1px solid var(--line);background:#fff;
+  border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:.12s;flex:none}
+.scale button:active{transform:scale(.9)}
+.scale button.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.scale.joy button.on{background:var(--ok);border-color:var(--ok)}
+.scale.alert button.on{background:var(--danger);border-color:var(--danger)}
+
+/* ==== MASCOTA ==== */
+.mascot{width:100%;height:100%;display:block;overflow:visible}
+.mascot .body{fill:var(--primary)}
+.mascot .screen{fill:#e6f5ec}
+.mascot .ant{stroke:var(--primary-dark);stroke-width:4;stroke-linecap:round}
+.mascot .ant-ball{fill:var(--accent);animation:antGlow 2.4s infinite}
+.mascot .eye{fill:#16223a;transform-box:fill-box;transform-origin:center;animation:eyeBlink 4.6s infinite}
+.mascot .eye.right{animation-delay:.07s}
+.mascot .mouth{fill:none;stroke:#16223a;stroke-width:3.4;stroke-linecap:round;
+  transform-box:fill-box;transform-origin:center}
+.mascot .cheek{fill:#ff9db1;opacity:.55}
+.mascot .home{fill:#e6f5ec;opacity:.85}
+@keyframes eyeBlink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.08)}}
+@keyframes antGlow{0%,100%{opacity:1}50%{opacity:.45}}
+.mascot.talking .mouth{animation:talk .26s infinite alternate}
+@keyframes talk{from{transform:scaleY(.35) scaleX(.94)}to{transform:scaleY(1.25) scaleX(1.06)}}
+.mascot.talking{animation:bob .7s infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+
+/* ==== DRAWER ==== */
+.overlay{position:fixed;inset:0;background:rgba(16,26,45,.45);opacity:0;
+  pointer-events:none;transition:.25s;z-index:40}
+.overlay.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;
+  background:#fff;z-index:50;transform:translateX(-102%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top);box-shadow:12px 0 40px rgba(16,26,45,.18)}
+.drawer.show{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;gap:12px;padding:18px 16px 14px;
+  background:linear-gradient(135deg,#22b573,#4cd28c);color:#fff}
+.drawer-head svg{width:40px;height:50px;flex:none}
+.drawer-head strong{display:block;font-size:16px}
+.drawer-head span{font-size:12px;opacity:.9}
+.drawer-nav{padding:10px 8px;overflow-y:auto;flex:1}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;
+  border:none;background:none;border-radius:13px;font-family:inherit;font-size:14.5px;
+  font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:.15s}
+.nav-item:hover,.nav-item:active{background:#eef6f0}
+.nav-item.active{background:#dbf3e5;color:var(--primary-dark)}
+.nav-item .ico{font-size:18px;width:24px;text-align:center;flex:none}
+.drawer-foot{padding:12px 16px calc(env(safe-area-inset-bottom) + 14px);
+  font-size:11px;color:var(--muted);border-top:1px solid var(--line)}
+
+/* ==== TOAST ==== */
+.toast{position:fixed;top:calc(env(safe-area-inset-top) + 70px);left:50%;
+  transform:translateX(-50%);background:#16223a;color:#fff;padding:12px 18px;
+  border-radius:14px;font-size:14px;font-weight:600;z-index:500;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);animation:fade .3s ease;max-width:88vw;
+  text-align:center;line-height:1.35}
+.toast.ok{background:linear-gradient(135deg,#22b573,#149a5a)}
+.toast.warn{background:linear-gradient(135deg,#f0a020,#c07a00)}
+
+/* ==== WELCOME ==== */
+.welcome{text-align:center;padding:10px 6px 4px}
+
+@media (max-width:380px){
+  .h1{font-size:18px}
+  .comida-grid{grid-template-columns:1fr}
+  .racha-grid{grid-template-columns:1fr}
+  .mov-grid{grid-template-columns:repeat(2,1fr)}
+  .agua-ring{width:150px;height:150px}
+  .agua-ring .ring-center b{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<template id="tplMascota">
+  <svg class="mascot" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <line class="ant" x1="50" y1="30" x2="50" y2="11"/>
+    <circle class="ant-ball" cx="50" cy="8" r="6"/>
+    <rect class="body" x="16" y="26" width="68" height="98" rx="21"/>
+    <rect class="screen" x="25" y="36" width="50" height="62" rx="12"/>
+    <ellipse class="eye left" cx="39" cy="58" rx="5.2" ry="7"/>
+    <ellipse class="eye right" cx="61" cy="58" rx="5.2" ry="7"/>
+    <circle class="cheek" cx="31" cy="72" r="4.2"/>
+    <circle class="cheek" cx="69" cy="72" r="4.2"/>
+    <path class="mouth" d="M42 71 Q50 80 58 71"/>
+    <circle class="home" cx="50" cy="109" r="6"/>
+  </svg>
+</template>
+
+<div class="app">
+  <header class="topbar">
+    <button class="icon-btn" id="menuBtn">☰</button>
+    <div class="brand">
+      <span data-mascota style="width:26px;height:32px"></span>
+      Sportín
+      <span class="badge-rol" id="badgeRol">Personal</span>
+    </div>
+    <button class="icon-btn" id="muteBtn">🔊</button>
+  </header>
+
+  <div class="views" id="views">
+
+    <!-- ============ HOY ============ -->
+    <section class="view active" id="view-hoy">
+      <div id="hoyContent"></div>
+    </section>
+
+    <!-- ============ AGUA ============ -->
+    <section class="view" id="view-agua">
+      <h1 class="h1">💧 Hidratación</h1>
+      <p class="sub">Sumá de a poco. Sin culpa. La meta es orientativa.</p>
+      <div id="aguaHero"></div>
+      <div class="card">
+        <h3>Últimos 7 días</h3>
+        <div class="agua-semana" id="aguaSemana"></div>
+        <p class="hint" style="margin:12px 0 0" id="aguaResumen"></p>
+      </div>
+      <div class="card">
+        <h3>Ajustes rápidos</h3>
+        <div class="field"><label>Meta diaria (ml)</label>
+          <input type="number" id="metaAguaInput" min="500" max="6000" step="100"></div>
+        <div class="field"><label>Tamaño del vaso (ml)</label>
+          <input type="number" id="vasoInput" min="100" max="1000" step="50"></div>
+        <button class="btn btn-secondary" style="width:100%" id="guardarMetaAgua">Guardar</button>
+      </div>
+    </section>
+
+    <!-- ============ COMIDAS ============ -->
+    <section class="view" id="view-comidas">
+      <h1 class="h1">🍽️ Comidas</h1>
+      <p class="sub">Registrá qué comiste y cómo te sentiste. Sin juzgar, sin contar calorías.</p>
+      <div class="comida-grid" id="comidaGrid"></div>
+      <div class="card" style="margin-top:14px">
+        <h3>Registro de hoy</h3>
+        <div id="comidaLista"></div>
+      </div>
+    </section>
+
+    <!-- ============ MOVIMIENTO ============ -->
+    <section class="view" id="view-movimiento">
+      <h1 class="h1">🏃 Movimiento</h1>
+      <p class="sub">Todo cuenta: caminar, estirar, bailar. Elegí qué hiciste.</p>
+      <div class="card">
+        <h3>Registro rápido</h3>
+        <div class="mov-grid" id="movGrid"></div>
+        <button class="btn btn-secondary" style="width:100%" id="movOtro">➕ Otro tipo</button>
+      </div>
+      <div class="card">
+        <h3>Hoy <span class="pill info" id="movMinHoy">0 min</span></h3>
+        <div class="mov-lista" id="movListaHoy"></div>
+      </div>
+      <div class="card">
+        <h3>Últimos 7 días</h3>
+        <div class="agua-semana" id="movSemana"></div>
+        <p class="hint" style="margin:12px 0 0" id="movResumen"></p>
+      </div>
+      <div class="card">
+        <h3>🧘 Pausa activa</h3>
+        <p class="hint">Si llevás mucho tiempo sentado/a, una pausa de 2 minutos cambia el cuerpo.</p>
+        <button class="btn btn-secondary" style="width:100%;justify-content:flex-start"
+          onclick="Sportin.abrirSkill('estiramiento')">🤸 Estiramiento corto (2 min)</button>
+        <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;margin-top:8px"
+          onclick="Sportin.abrirSkill('movilidad')">🦴 Movilidad de cuello y hombros</button>
+      </div>
+    </section>
+
+    <!-- ============ MINDFULNESS ============ -->
+    <section class="view" id="view-mindfulness">
+      <h1 class="h1">🧘 Mindfulness</h1>
+      <p class="sub">Guiado por voz, para poder cerrar los ojos. Encontrá un lugar tranquilo.</p>
+      <div class="mind-grid">
+        <div class="mind-card" data-patron="cuadrada">
+          <div class="mind-ico">🟦</div>
+          <div class="mind-body">
+            <h3>Respiración cuadrada</h3>
+            <p>Inhalá · Sostené · Exhalá · Sostené. 4 tiempos cada uno. 6 ciclos.</p>
+            <small>▶ Con voz · ~2 min</small>
+          </div>
+        </div>
+        <div class="mind-card blue" data-patron="478">
+          <div class="mind-ico">🌙</div>
+          <div class="mind-body">
+            <h3>4-7-8 relajante</h3>
+            <p>Inhalá 4 · Sostené 7 · Exhalá 8. Ideal para bajar revoluciones.</p>
+            <small>▶ Con voz · ~2 min</small>
+          </div>
+        </div>
+        <div class="mind-card orange" data-patron="coherencia">
+          <div class="mind-ico">💗</div>
+          <div class="mind-body">
+            <h3>Coherencia cardíaca</h3>
+            <p>Inhalá 5 · Exhalá 5. Equilibra el sistema nervioso. 6 ciclos.</p>
+            <small>▶ Con voz · ~1 min</small>
+          </div>
+        </div>
+        <div class="mind-card purple" data-patron="bodyscan">
+          <div class="mind-ico">🫧</div>
+          <div class="mind-body">
+            <h3>Body scan corto</h3>
+            <p>Recorrido guiado por el cuerpo, de pies a cabeza. ~3 min.</p>
+            <small>▶ Con voz · ~3 min</small>
+          </div>
+        </div>
+        <div class="mind-card" data-patron="libre">
+          <div class="mind-ico">⏱️</div>
+          <div class="mind-body">
+            <h3>Meditación libre</h3>
+            <p>Elegís la duración. Silencio o campanas suaves cada minuto.</p>
+            <small>▶ Con voz al inicio y al cierre</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>📓 Diario de gratitud</h3>
+        <p class="hint">Tres cosas, chiquitas, de hoy. Cierra el día de otra manera.</p>
+        <div id="gratitudHoy"></div>
+        <button class="btn btn-secondary" style="width:100%;margin-top:6px" id="gratitudBtn">✍️ Anotar 3 cosas</button>
+      </div>
+
+      <div class="card">
+        <h3>Sesiones recientes</h3>
+        <div id="mindHistorial"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMPRAS ============ -->
+    <section class="view" id="view-compras">
+      <h1 class="h1">🛒 Lista de compras</h1>
+      <p class="sub">Cargá lo que falta. Se agrupa por sector del súper.</p>
+      <div class="card" style="padding:14px">
+        <div class="field" style="margin-bottom:10px">
+          <input type="text" id="compraNueva" placeholder="Ej: manzanas, yogur natural...">
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <select id="compraCategoria">
+            <option value="verduleria">🥬 Frutas y verduras</option>
+            <option value="carnes">🥩 Carnes y pescados</option>
+            <option value="lacteos">🧀 Lácteos y huevos</option>
+            <option value="almacen">🥫 Almacén</option>
+            <option value="congelados">🧊 Congelados</option>
+            <option value="bebidas">🥤 Bebidas</option>
+            <option value="limpieza">🧼 Limpieza</option>
+            <option value="otros">📦 Otros</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="compraAgregar">➕ Agregar</button>
+      </div>
+      <div class="card">
+        <h3>Por comprar <span class="pill info" id="compraPend">0</span>
+          <button class="h3-btn" id="compraLimpiar">🧹 Limpiar tildados</button>
+        </h3>
+        <div id="compraLista"></div>
+      </div>
+    </section>
+
+    <!-- ============ RACHAS ============ -->
+    <section class="view" id="view-rachas">
+      <h1 class="h1">🔥 Rachas</h1>
+      <p class="sub">Días seguidos sosteniendo cada hábito. Un día flojo no rompe todo: sumá cuando puedas.</p>
+      <div class="racha-grid" id="rachaGrid"></div>
+      <div class="card" style="margin-top:14px">
+        <h3>🏆 Logros desbloqueados</h3>
+        <div id="logrosLista"></div>
+      </div>
+    </section>
+
+    <!-- ============ AJUSTES ============ -->
+    <section class="view" id="view-ajustes">
+      <h1 class="h1">⚙️ Ajustes</h1>
+
+      <div class="card">
+        <div class="field"><label>¿Cómo querés que te llame?</label>
+          <input type="text" id="setNombre" placeholder="Tu nombre"></div>
+        <div class="switch-row"><span>🔊 Que Sportín hable en momentos clave</span>
+          <label class="switch"><input type="checkbox" id="setVoz"><span class="slider"></span></label></div>
+        <div class="field" style="margin-top:14px"><label>Velocidad de la voz</label>
+          <input type="range" id="setVel" min="0.7" max="1.4" step="0.05"></div>
+        <button class="btn btn-primary" id="guardarAjustes" style="margin-top:8px">Guardar</button>
+      </div>
+
+      <div class="card">
+        <h3>🎯 Metas personales</h3>
+        <div class="field"><label>Agua diaria (ml)</label>
+          <input type="number" id="setMetaAgua" min="500" max="6000" step="100"></div>
+        <div class="field"><label>Movimiento diario (min, orientativo)</label>
+          <input type="number" id="setMetaMov" min="0" max="180" step="5"></div>
+        <button class="btn btn-secondary" style="width:100%" id="guardarMetas">Guardar metas</button>
+      </div>
+
+      <div class="card" style="background:#eef9f2;border:1px solid #bfe6cf">
+        <h3>🩺 Modo clínico activo</h3>
+        <p class="hint" style="color:#14532d">Tus datos de salud son datos sensibles (Ley 25.326). Sportín los trata con consentimiento, auditoría y derecho a exportar/borrar.</p>
+        <div id="integridadAudit" style="font-size:12.5px;color:#14532d;padding:10px;background:#fff;border-radius:10px;margin-bottom:10px"></div>
+        <button class="btn btn-secondary" style="width:100%" id="verAuditoria">📜 Ver historial de auditoría</button>
+      </div>
+
+      <div class="card">
+        <h3>📜 Consentimiento informado</h3>
+        <div id="consentInfo"></div>
+        <button class="btn btn-danger" style="width:100%;margin-top:8px" id="revocarConsent">🚫 Revocar consentimiento</button>
+      </div>
+
+      <div class="card">
+        <h3>📋 Marco legal aplicable</h3>
+        <div class="legal-box" id="marcoLegalBox"></div>
+      </div>
+
+      <div class="card">
+        <h3>📦 Tus datos</h3>
+        <p class="hint">La historia clínica es tuya. Podés exportarla o borrarla cuando quieras.</p>
+        <button class="btn btn-secondary" style="width:100%;margin-bottom:8px" onclick="Sportin.exportar()">⬇️ Exportar mis datos</button>
+        <button class="btn btn-danger" style="width:100%" onclick="Sportin.borrarTodo()">🗑️ Borrar todo</button>
+      </div>
+
+      <div class="card">
+        <h3>ℹ️ Sobre Sportín</h3>
+        <p class="hint">Compañero de cuidado personal. No reemplaza a profesionales de la salud. Si estás en crisis: 135 o 911.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <span data-mascota style="width:40px;height:50px"></span>
+    <div><strong>Sportín</strong><span>Tu compañero de cuidado</span></div>
+  </div>
+  <nav class="drawer-nav" id="nav">
+    <button class="nav-item active" data-view="hoy"><span class="ico">🏠</span> Hoy</button>
+    <button class="nav-item" data-view="agua"><span class="ico">💧</span> Agua</button>
+    <button class="nav-item" data-view="comidas"><span class="ico">🍽️</span> Comidas</button>
+    <button class="nav-item" data-view="movimiento"><span class="ico">🏃</span> Movimiento</button>
+    <button class="nav-item" data-view="mindfulness"><span class="ico">🧘</span> Mindfulness</button>
+    <button class="nav-item" data-view="compras"><span class="ico">🛒</span> Lista de compras</button>
+    <button class="nav-item" data-view="rachas"><span class="ico">🔥</span> Rachas</button>
+    <button class="nav-item" data-view="ajustes"><span class="ico">⚙️</span> Ajustes</button>
+  </nav>
+  <div class="drawer-foot">Sportín v1 · Datos en tu dispositivo</div>
+</aside>
+
+<!-- ============ SHEET COMIDA ============ -->
+<section class="sheet" id="sheetComida">
+  <div class="sheet-head"><h2 id="comidaTitle">Registrar comida</h2>
+    <button class="icon-btn" data-close-sheet>✕</button></div>
+  <div class="sheet-body">
+    <input type="hidden" id="c-tipo">
+    <input type="hidden" id="c-id">
+    <div class="field"><label>¿Qué comiste?</label>
+      <textarea id="c-texto" placeholder="Ej: yogur con frutas y granola"></textarea>
+      <div class="quick-chips" id="c-quick"></div>
+    </div>
+    <div class="field"><label>¿Cuánta hambre tenías?</label>
+      <div class="scale" id="c-hambre" data-scale="hambre"></div>
+      <div class="hint" style="margin:8px 0 0;font-size:11.5px">0 = nada · 5 = muchísima</div>
+    </div>
+    <div class="field"><label>¿Cómo te sentiste después?</label>
+      <div class="quick-chips" id="c-animo">
+        <button class="quick-chip" data-animo="liviano">🪶 Liviano</button>
+        <button class="quick-chip" data-animo="bien">😊 Bien</button>
+        <button class="quick-chip" data-animo="pesado">🪨 Pesado</button>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" data-close-sheet>Cancelar</button>
+      <button class="btn btn-primary" id="guardarComida">Guardar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHEET MOVIMIENTO ============ -->
+<section class="sheet" id="sheetMovimiento">
+  <div class="sheet-head"><h2 id="movTitle">Registrar movimiento</h2>
+    <button class="icon-btn" data-close-sheet>✕</button></div>
+  <div class="sheet-body">
+    <input type="hidden" id="mv-id">
+    <input type="hidden" id="mv-tipo">
+    <div class="field"><label>Actividad</label>
+      <input type="text" id="mv-nombre" placeholder="Ej: Caminata"></div>
+    <div class="field"><label>Duración (min)</label>
+      <input type="number" id="mv-dur" min="1" max="300" placeholder="Ej: 30"></div>
+    <div class="field"><label>Intensidad</label>
+      <div class="quick-chips" id="mv-int">
+        <button class="quick-chip" data-int="suave">🌱 Suave</button>
+        <button class="quick-chip" data-int="media">💪 Media</button>
+        <button class="quick-chip" data-int="alta">🔥 Alta</button>
+      </div>
+    </div>
+    <div class="field"><label>Notas (opcional)</label>
+      <input type="text" id="mv-notas" placeholder="Cómo te sentiste, dónde, con quién..."></div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" data-close-sheet>Cancelar</button>
+      <button class="btn btn-primary" id="guardarMov">Guardar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHEET GRATITUD ============ -->
+<section class="sheet" id="sheetGratitud">
+  <div class="sheet-head"><h2>📓 Tres cosas de hoy</h2>
+    <button class="icon-btn" data-close-sheet>✕</button></div>
+  <div class="sheet-body">
+    <p class="hint">No tienen que ser grandes. Un rayo de sol, un mate rico, un mensaje.</p>
+    <div class="field"><label>1</label><input type="text" id="g-1"></div>
+    <div class="field"><label>2</label><input type="text" id="g-2"></div>
+    <div class="field"><label>3</label><input type="text" id="g-3"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" data-close-sheet>Cancelar</button>
+      <button class="btn btn-primary" id="guardarGratitud">Guardar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHEET SKILL / RUTINA CORTA ============ -->
+<section class="sheet" id="sheetSkill">
+  <div class="sheet-head"><h2 id="skillTitle">Rutina corta</h2>
+    <button class="icon-btn" data-close-sheet>✕</button></div>
+  <div class="sheet-body" id="skillBody"></div>
+</section>
+
+<!-- ============ SHEET AUDITORÍA ============ -->
+<section class="sheet" id="sheetAudit">
+  <div class="sheet-head"><h2>📜 Historial de auditoría</h2>
+    <button class="icon-btn" data-close-sheet>✕</button></div>
+  <div class="sheet-body">
+    <p class="hint">Cada evento se encadena criptográficamente con el anterior. Si algo se modifica, la cadena se rompe y se detecta.</p>
+    <div id="auditLista"></div>
+  </div>
+</section>
+
+<!-- ============ OVERLAY RESPIRACIÓN ============ -->
+<div class="breath-overlay" id="breathOverlay">
+  <div class="breath-top">
+    <div class="btitle" id="bTitle">Respiración</div>
+    <button class="bclose" id="bClose">✕ Salir</button>
+  </div>
+  <div class="breath-stage">
+    <div class="breath-circle" id="bCircle"></div>
+    <div class="b-text">
+      <div class="b-fase" id="bFase">Preparate</div>
+      <div class="b-cont" id="bCont">3</div>
+    </div>
+  </div>
+  <div class="breath-info" id="bInfo">
+    <strong>Encontrá una posición cómoda</strong>
+    Cerrá los ojos cuando estés listo/a.
+  </div>
+  <div class="breath-controls">
+    <button class="primary" id="bPlay">▶ Empezar</button>
+    <button id="bStop">⏹ Detener</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   SPORTÍN v1 · Cuidado personal · Modo clínico
+   ===================================================================== */
+
+const SCHEMA_VERSION = 1;
+
+const MARCO_LEGAL = Object.freeze({
+  LEY_25326: {
+    nombre: 'Ley 25.326 — Protección de Datos Personales',
+    puntos: ['Los datos de salud son DATOS SENSIBLES.',
+      'Requieren consentimiento libre, expreso e informado.',
+      'Derecho de acceso, rectificación y supresión del titular.']
+  },
+  LEY_26529: {
+    nombre: 'Ley 26.529 — Derechos del Paciente e Historia Clínica',
+    puntos: ['La historia clínica es PROPIEDAD DEL PACIENTE.',
+      'Derecho a copia autenticada en 48 hs, gratis.',
+      'Consentimiento informado documentado.']
+  }
+});
+
+const K = {
+  ajustes:'sportin.v1.ajustes',
+  agua:'sportin.v1.agua',
+  comidas:'sportin.v1.comidas',
+  movimientos:'sportin.v1.movs',
+  mindfulness:'sportin.v1.mind',
+  gratitud:'sportin.v1.grat',
+  compras:'sportin.v1.compras',
+  quickComidas:'sportin.v1.quickCom',
+  audit:'sportin.v1.audit',
+  consentimiento:'sportin.v1.consent',
+  usuario:'sportin.v1.usuario'
+};
+
+const Storage = {
+  cargar(k, def){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; }catch(e){ return def; } },
+  guardar(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.error(e); } },
+  borrar(k){ localStorage.removeItem(k); }
+};
+
+const ACTOR = Storage.cargar(K.usuario, null) || { id:'sportin-local', creado:Date.now() };
+Storage.guardar(K.usuario, ACTOR);
+const OWNER_ID = ACTOR.id;
+
+/* ===== ESTADO ===== */
+let ajustes = Object.assign({
+  nombre:'', voz:true, velocidad:1,
+  metaAgua:2000, vaso:250, metaMov:30
+}, Storage.cargar(K.ajustes, {}));
+let agua = Storage.cargar(K.agua, {});
+let comidas = Storage.cargar(K.comidas, []);
+let movimientos = Storage.cargar(K.movimientos, []);
+let mindfulnessHist = Storage.cargar(K.mindfulness, []);
+let gratitud = Storage.cargar(K.gratitud, []);
+let compras = Storage.cargar(K.compras, []);
+let quickComidas = Storage.cargar(K.quickComidas, [
+  'Yogur con frutas', 'Tostadas con palta', 'Avena con leche',
+  'Ensalada', 'Pollo con verduras', 'Arroz con atún',
+  'Frutas', 'Mate cocido', 'Huevos revueltos'
+]);
+let auditLog = Storage.cargar(K.audit, []);
+let consentimiento = Storage.cargar(K.consentimiento, null);
+if (!consentimiento){
+  consentimiento = {
+    version:'1.0', fecha:Date.now(),
+    texto:'Autorizo el tratamiento de mis datos de salud (hidratación, alimentación, movimiento, mindfulness) en este dispositivo, con fines de autocuidado, conforme a la Ley 25.326 (datos sensibles) y a la Ley 26.529 (historia clínica). Entiendo que los datos se guardan localmente, que puedo exportarlos, rectificarlos y suprimirlos en cualquier momento, y que puedo revocar este consentimiento sin dar explicaciones.',
+    revocado:false
+  };
+  Storage.guardar(K.consentimiento, consentimiento);
+}
+
+/* ===== HELPERS ===== */
+const $ = (s,c=document) => c.querySelector(s);
+const $$ = (s,c=document) => [...c.querySelectorAll(s)];
+const uid = (p='id') => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
+const hoyISO = () => { const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const isoDe = (d) => new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const dormir = ms => new Promise(r => setTimeout(r, ms));
+const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtFecha = iso => new Date(iso+'T12:00').toLocaleDateString('es-AR',{weekday:'long', day:'numeric', month:'long'});
+const fmtFechaCorta = iso => new Date(iso+'T12:00').toLocaleDateString('es-AR',{day:'2-digit', month:'2-digit'});
+const DIAS_CORTOS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+/* ===== AUDITORÍA ===== */
+function hashSimple(str){
+  let h = 2166136261;
+  for (let i=0; i<str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h>>>0).toString(16).padStart(8,'0');
+}
+function auditar(accion, detalle={}){
+  const anterior = auditLog.length ? auditLog[auditLog.length-1] : null;
+  const hashAnterior = anterior ? anterior.hashActual : '0'.repeat(8);
+  const entrada = { ts:Date.now(), actor:ACTOR.id, accion, detalle, hashAnterior };
+  entrada.hashActual = hashSimple(JSON.stringify(entrada));
+  auditLog.push(entrada);
+  if (auditLog.length > 1500) auditLog = auditLog.slice(-1500);
+  Storage.guardar(K.audit, auditLog);
+}
+function verificarIntegridad(){
+  for (let i=1; i<auditLog.length; i++){
+    if (auditLog[i].hashAnterior !== auditLog[i-1].hashActual) return { ok:false, indiceRoto:i };
+  }
+  return { ok:true, total:auditLog.length };
+}
+
+/* ===== MASCOTA ===== */
+const TPL = $('#tplMascota');
+const crearMascota = () => TPL.content.firstElementChild.cloneNode(true);
+function pintarMascotas(){ $$('[data-mascota]').forEach(c => { c.innerHTML=''; c.appendChild(crearMascota()); }); }
+
+/* ===== VOZ ===== */
+let voces = [];
+const cargarVoces = () => { if ('speechSynthesis' in window) voces = speechSynthesis.getVoices(); };
+cargarVoces();
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = cargarVoces;
+const sinEmojis = s => s.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu,'');
+const hablando = on => $$('.mascot').forEach(m => m.classList.toggle('talking', on));
+
+function hablar(texto, opts={}){
+  if (!ajustes.voz || !('speechSynthesis' in window)) return;
+  if (!opts.sumar) speechSynthesis.cancel();
+  const limpio = sinEmojis(texto).replace(/[*_`#>•·]/g,'').replace(/\n+/g,'. ').trim();
+  if (!limpio) return;
+  const u = new SpeechSynthesisUtterance(limpio);
+  u.lang = 'es-AR'; u.rate = ajustes.velocidad || 1; u.pitch = 1.05;
+  const v = voces.find(x => /^es/i.test(x.lang));
+  if (v) u.voice = v;
+  u.onstart = () => hablando(true);
+  u.onend = () => hablando(false);
+  u.onerror = () => hablando(false);
+  speechSynthesis.speak(u);
+}
+function callar(){ if ('speechSynthesis' in window) speechSynthesis.cancel(); hablando(false); }
+
+/* ===== AUDIO CHIME ===== */
+function chime(freq=660, dur=0.35, vol=0.14){
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    osc.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(vol, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
+    setTimeout(() => ctx.close(), (dur+0.2)*1000);
+  } catch(e){}
+}
+
+/* ===== TOAST ===== */
+function toast(txt, tipo=''){
+  const t = document.createElement('div');
+  t.className = 'toast ' + tipo;
+  t.textContent = txt;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4200);
+}
+
+/* =====================================================================
+   DOMINIO
+   ===================================================================== */
+
+const Dominio = {
+  agua: {
+    get(fecha = hoyISO()){ return agua[fecha] || 0; },
+    agregar(ml, fecha = hoyISO()){
+      agua[fecha] = Math.max(0, (agua[fecha] || 0) + ml);
+      Storage.guardar(K.agua, agua);
+      auditar('agua_agregada', { ml, total: agua[fecha], fecha });
+      return agua[fecha];
+    },
+    set(ml, fecha = hoyISO()){
+      agua[fecha] = Math.max(0, ml);
+      Storage.guardar(K.agua, agua);
+      auditar('agua_seteada', { ml: agua[fecha], fecha });
+      return agua[fecha];
+    },
+    semana(){
+      const out = [];
+      for (let i=6; i>=0; i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        const iso = isoDe(d);
+        out.push({ iso, ml: agua[iso] || 0 });
+      }
+      return out;
+    }
+  },
+  comidas: {
+    porFecha(fecha = hoyISO()){ return comidas.filter(c => c.fecha === fecha); },
+    porTipo(tipo, fecha = hoyISO()){ return comidas.find(c => c.fecha === fecha && c.tipo === tipo); },
+    guardar(data){
+      const id = data.id;
+      if (id){
+        const idx = comidas.findIndex(c => c.id === id);
+        if (idx >= 0) comidas[idx] = { ...comidas[idx], ...data, updatedAt: Date.now() };
+        auditar('comida_actualizada', { tipo: data.tipo });
+      } else {
+        const nuevo = { ...data, id: uid('com'), ts: Date.now(), ownerId: OWNER_ID };
+        comidas.push(nuevo);
+        auditar('comida_creada', { tipo: data.tipo });
+      }
+      Storage.guardar(K.comidas, comidas);
+    },
+    borrar(id){
+      const c = comidas.find(x => x.id === id);
+      if (!c) return;
+      comidas = comidas.filter(x => x.id !== id);
+      Storage.guardar(K.comidas, comidas);
+      auditar('comida_borrada', { tipo: c.tipo });
+    },
+    streak(){
+      let s = 0; const d = new Date();
+      for (let i=0; i<400; i++){
+        const iso = isoDe(d);
+        const cantidad = comidas.filter(c => c.fecha === iso).length;
+        if (cantidad >= 2) s++;
+        else if (i === 0){}
+        else break;
+        d.setDate(d.getDate()-1);
+      }
+      return s;
+    }
+  },
+  movimiento: {
+    porFecha(fecha = hoyISO()){ return movimientos.filter(m => m.fecha === fecha); },
+    minutosHoy(){ return this.porFecha().reduce((a,b) => a + (b.dur||0), 0); },
+    guardar(data){
+      const id = data.id;
+      if (id){
+        const idx = movimientos.findIndex(m => m.id === id);
+        if (idx >= 0) movimientos[idx] = { ...movimientos[idx], ...data };
+        auditar('movimiento_actualizado', { tipo: data.tipo });
+      } else {
+        movimientos.push({ ...data, id: uid('mov'), ts: Date.now(), ownerId: OWNER_ID });
+        auditar('movimiento_creado', { tipo: data.tipo, dur: data.dur });
+      }
+      Storage.guardar(K.movimientos, movimientos);
+    },
+    borrar(id){
+      movimientos = movimientos.filter(m => m.id !== id);
+      Storage.guardar(K.movimientos, movimientos);
+      auditar('movimiento_borrado', { id });
+    },
+    semana(){
+      const out = [];
+      for (let i=6; i>=0; i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        const iso = isoDe(d);
+        const min = movimientos.filter(m => m.fecha === iso).reduce((a,b) => a + (b.dur||0), 0);
+        out.push({ iso, min });
+      }
+      return out;
+    },
+    streak(){
+      let s = 0; const d = new Date();
+      for (let i=0; i<400; i++){
+        const iso = isoDe(d);
+        const min = movimientos.filter(m => m.fecha === iso).reduce((a,b) => a + (b.dur||0), 0);
+        if (min >= 10) s++;
+        else if (i === 0){}
+        else break;
+        d.setDate(d.getDate()-1);
+      }
+      return s;
+    }
+  },
+  mindfulness: {
+    guardar(tipo, durSeg){
+      mindfulnessHist.push({ id: uid('min'), fecha: hoyISO(), tipo, durSeg, ts: Date.now(), ownerId: OWNER_ID });
+      Storage.guardar(K.mindfulness, mindfulnessHist);
+      auditar('mindfulness_completado', { tipo, durSeg });
+    },
+    streak(){
+      const fechas = new Set(mindfulnessHist.map(m => m.fecha));
+      let s = 0; const d = new Date();
+      for (let i=0; i<400; i++){
+        const iso = isoDe(d);
+        if (fechas.has(iso)) s++;
+        else if (i === 0){}
+        else break;
+        d.setDate(d.getDate()-1);
+      }
+      return s;
+    }
+  },
+  gratitud: {
+    hoy(){ return gratitud.find(g => g.fecha === hoyISO()); },
+    guardar(items){
+      const existente = this.hoy();
+      if (existente){ existente.items = items; existente.ts = Date.now(); }
+      else gratitud.push({ id: uid('grat'), fecha: hoyISO(), items, ts: Date.now(), ownerId: OWNER_ID });
+      Storage.guardar(K.gratitud, gratitud);
+      auditar('gratitud_guardada', { n: items.filter(x=>x.trim()).length });
+    }
+  },
+  compras: {
+    listar(){ return compras.slice(); },
+    agregar(texto, cat){
+      compras.push({ id: uid('comp'), texto:texto.trim(), cat, comprado:false, ts: Date.now(), ownerId: OWNER_ID });
+      Storage.guardar(K.compras, compras);
+      auditar('compra_agregada', { cat });
+    },
+    toggle(id){
+      const c = compras.find(x => x.id === id);
+      if (!c) return;
+      c.comprado = !c.comprado;
+      Storage.guardar(K.compras, compras);
+      auditar('compra_toggled', { comprado: c.comprado });
+    },
+    borrar(id){
+      compras = compras.filter(c => c.id !== id);
+      Storage.guardar(K.compras, compras);
+      auditar('compra_borrada', { id });
+    },
+    limpiarTildados(){
+      const n = compras.filter(c => c.comprado).length;
+      compras = compras.filter(c => !c.comprado);
+      Storage.guardar(K.compras, compras);
+      auditar('compras_limpiadas', { n });
+      return n;
+    }
+  },
+  rachas: {
+    agua(){
+      let s = 0; const d = new Date();
+      const meta = ajustes.metaAgua || 2000;
+      for (let i=0; i<400; i++){
+        const iso = isoDe(d);
+        if ((agua[iso]||0) >= meta) s++;
+        else if (i === 0){}
+        else break;
+        d.setDate(d.getDate()-1);
+      }
+      return s;
+    },
+    mejorAgua(){
+      const metas = ajustes.metaAgua || 2000;
+      const dias = Object.keys(agua).sort();
+      let mejor = 0, actual = 0, previa = null;
+      dias.forEach(iso => {
+        if ((agua[iso]||0) >= metas){
+          if (previa && (new Date(iso) - new Date(previa)) <= 86400000*1.5) actual++;
+          else actual = 1;
+          if (actual > mejor) mejor = actual;
+          previa = iso;
+        } else { actual = 0; previa = null; }
+      });
+      return mejor;
+    }
+  }
+};
+
+/* =====================================================================
+   RENDER: HOY
+   ===================================================================== */
+function renderHoy(){
+  const cont = $('#hoyContent');
+  const h = new Date().getHours();
+  const saludo = h<12?'Buenos días': h<20?'Buenas tardes':'Buenas noches';
+  const nombre = ajustes.nombre ? `, ${ajustes.nombre}` : '';
+
+  const ml = Dominio.agua.get();
+  const metaAgua = ajustes.metaAgua || 2000;
+  const pctAgua = Math.min(100, Math.round(ml/metaAgua*100));
+  const minMov = Dominio.movimiento.minutosHoy();
+  const comidasHoy = Dominio.comidas.porFecha();
+  const mindHoy = mindfulnessHist.filter(m => m.fecha === hoyISO()).length;
+  const gratHoy = Dominio.gratitud.hoy();
+
+  const rachaAgua = Dominio.rachas.agua();
+
+  let html = `
+    <div class="welcome">
+      <div style="width:110px;height:138px;margin:0 auto 6px">${crearMascotaHTML()}</div>
+      <h1 style="margin:6px 0 2px;font-size:22px">${saludo}${escapeHTML(nombre)}</h1>
+      <p style="margin:0;color:var(--muted);font-size:13.5px;text-transform:capitalize">${fmtFecha(hoyISO())}</p>
+    </div>
+  `;
+
+  if (rachaAgua >= 3){
+    html += `<div class="card" style="background:linear-gradient(135deg,#fff7e8,#ffefd0);border-left:5px solid var(--accent);padding:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:28px">🔥</span>
+        <div>
+          <strong style="font-size:14.5px">¡${rachaAgua} días con tu meta de agua!</strong>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Sostenelo, sin culpa si un día no.</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  html += `
+    <div class="card" style="padding:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h3 style="margin:0">💧 Agua</h3>
+        <span class="pill ${pctAgua>=100?'ok':'info'}">${ml} / ${metaAgua} ml</span>
+      </div>
+      <div class="progress" style="height:10px;background:#e6f0ea;border-radius:99px;overflow:hidden;margin-bottom:10px">
+        <div style="height:100%;width:${pctAgua}%;background:linear-gradient(90deg,#2ea8e0,#4cc4f0);transition:width .4s;border-radius:99px"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-agua="250">+250</button>
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-agua="500">+500</button>
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-agua="vaso">+1 vaso</button>
+      </div>
+    </div>
+  `;
+
+  const ORDEN_COMIDAS = [
+    { tipo:'desayuno', label:'Desayuno', em:'🌅' },
+    { tipo:'almuerzo', label:'Almuerzo', em:'☀️' },
+    { tipo:'merienda', label:'Merienda', em:'🍵' },
+    { tipo:'cena', label:'Cena', em:'🌙' }
+  ];
+  html += `<div class="card">
+    <h3>🍽️ Comidas de hoy <span class="pill info">${comidasHoy.length}/4</span></h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">`;
+  ORDEN_COMIDAS.forEach(cm => {
+    const c = comidasHoy.find(x => x.tipo === cm.tipo);
+    html += `
+      <div class="comida-card ${c?'':'vacio'}" style="padding:10px" data-comida-hoy="${cm.tipo}">
+        <h4 style="font-size:12.5px"><span class="em" style="font-size:16px">${cm.em}</span> ${cm.label}</h4>
+        <p style="font-size:11.5px;min-height:28px">${c ? escapeHTML(c.texto.slice(0,60)) : 'Sin registrar'}</p>
+      </div>`;
+  });
+  html += `</div></div>`;
+
+  const metaMov = ajustes.metaMov || 30;
+  const pctMov = Math.min(100, Math.round(minMov/Math.max(1,metaMov)*100));
+  html += `
+    <div class="card" style="padding:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h3 style="margin:0">🏃 Movimiento</h3>
+        <span class="pill ${minMov>=metaMov?'ok':'info'}">${minMov} / ${metaMov} min</span>
+      </div>
+      <div class="progress" style="height:10px;background:#e6f0ea;border-radius:99px;overflow:hidden;margin-bottom:10px">
+        <div style="height:100%;width:${pctMov}%;background:linear-gradient(90deg,#22b573,#4cd28c);transition:width .4s;border-radius:99px"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-ir="movimiento">Registrar</button>
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-skill="estiramiento">Estirar 2 min</button>
+      </div>
+    </div>
+  `;
+
+  html += `
+    <div class="card" style="padding:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h3 style="margin:0">🧘 Mindfulness</h3>
+        <span class="pill ${mindHoy>0?'ok':'info'}">${mindHoy} hoy</span>
+      </div>
+      <p class="hint" style="margin-bottom:10px">${mindHoy>0 ? 'Ya te diste un espacio. Muy bien.' : 'Aunque sean 2 minutos, cambia el día.'}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-patron="cuadrada">🟦 Respirar</button>
+        <button class="btn btn-secondary" style="flex:1;padding:10px" data-patron="478">🌙 4-7-8</button>
+      </div>
+    </div>
+  `;
+
+  html += `
+    <div class="card" style="padding:14px">
+      <h3 style="margin:0 0 10px">📓 Gratitud</h3>
+      ${gratHoy ? `
+        <div style="font-size:13px;line-height:1.55">
+          ${gratHoy.items.filter(x=>x.trim()).map(i => `• ${escapeHTML(i)}`).join('<br>')}
+        </div>
+      ` : `<p class="hint" style="margin:0 0 10px">Anotá tres cositas de hoy. Chiquitas, aunque parezcan obvias.</p>`}
+      <button class="btn btn-secondary" style="width:100%;margin-top:10px" id="hoyGratBtn">
+        ${gratHoy ? '✏️ Editar' : '✍️ Anotar 3 cosas'}
+      </button>
+    </div>
+  `;
+
+  html += `
+    <div class="card" style="padding:14px;background:#f0f7ff;border:1px solid #c5ddf5">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">🛋️</span>
+        <div style="flex:1">
+          <strong style="font-size:14px;color:#0d2a45">Día sin energía</strong>
+          <div style="font-size:12px;color:#4a6583;margin-top:2px">Si hoy no podés con todo, está bien. Mínimo vital:</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-secondary" style="flex:1;padding:9px;font-size:13px" data-agua="250">💧 1 vaso</button>
+        <button class="btn btn-secondary" style="flex:1;padding:9px;font-size:13px" data-skill="estiramiento">🤸 Estirar</button>
+      </div>
+    </div>
+  `;
+
+  cont.innerHTML = html;
+
+  cont.querySelectorAll('[data-agua]').forEach(b => {
+    b.onclick = () => {
+      const v = b.dataset.agua;
+      const mlAdd = v === 'vaso' ? (ajustes.vaso || 250) : parseInt(v, 10);
+      const total = Dominio.agua.agregar(mlAdd);
+      chime(880, 0.25, 0.1);
+      if (total >= (ajustes.metaAgua||2000) && total - mlAdd < (ajustes.metaAgua||2000)){
+        hablar('¡Meta de agua cumplida! Muy bien.');
+        toast('¡Meta de agua cumplida! 💧', 'ok');
+      }
+      renderHoy(); renderAgua();
+    };
+  });
+  cont.querySelectorAll('[data-comida-hoy]').forEach(b => {
+    b.onclick = () => abrirSheetComida(b.dataset.comidaHoy);
+  });
+  cont.querySelectorAll('[data-ir]').forEach(b => {
+    b.onclick = () => irA(b.dataset.ir);
+  });
+  cont.querySelectorAll('[data-skill]').forEach(b => {
+    b.onclick = () => abrirSkill(b.dataset.skill);
+  });
+  cont.querySelectorAll('[data-patron]').forEach(b => {
+    b.onclick = () => abrirRespiracion(b.dataset.patron);
+  });
+  const gBtn = $('#hoyGratBtn');
+  if (gBtn) gBtn.onclick = abrirSheetGratitud;
+}
+function crearMascotaHTML(){
+  const tmp = document.createElement('div');
+  tmp.appendChild(crearMascota());
+  return tmp.innerHTML;
+}
+
+/* =====================================================================
+   RENDER: AGUA
+   ===================================================================== */
+function renderAgua(){
+  const ml = Dominio.agua.get();
+  const meta = ajustes.metaAgua || 2000;
+  const pct = Math.min(100, ml/meta*100);
+
+  const R = 70, C = 2*Math.PI*R;
+  const offset = C - (pct/100)*C;
+
+  $('#aguaHero').innerHTML = `
+    <div class="agua-hero">
+      <div class="agua-ring">
+        <svg viewBox="0 0 170 170" width="170" height="170">
+          <circle class="ring-bg" cx="85" cy="85" r="${R}"></circle>
+          <circle class="ring-fg" cx="85" cy="85" r="${R}"
+            stroke-dasharray="${C}" stroke-dashoffset="${offset}"></circle>
+        </svg>
+        <div class="ring-center">
+          <b>${(ml/1000).toFixed(2)}</b>
+          <small>de ${(meta/1000).toFixed(1)} L</small>
+        </div>
+      </div>
+      <div class="agua-btns">
+        <button class="agua-btn primary" data-add="vaso">+ 1 vaso</button>
+        <button class="agua-btn" data-add="250">+ 250</button>
+        <button class="agua-btn" data-add="500">+ 500</button>
+      </div>
+      <div style="margin-top:10px">
+        <button class="agua-btn neg" data-add="-250">↶ −250</button>
+        <button class="agua-btn neg" id="resetAgua">↻ Reiniciar hoy</button>
+      </div>
+    </div>
+  `;
+
+  $('#aguaHero').querySelectorAll('[data-add]').forEach(b => {
+    b.onclick = () => {
+      const v = b.dataset.add;
+      const add = v === 'vaso' ? (ajustes.vaso || 250) : parseInt(v, 10);
+      const total = Dominio.agua.agregar(add);
+      if (add > 0) chime(880, 0.2, 0.08);
+      if (total >= meta && total - add < meta){
+        hablar('¡Meta de agua cumplida!');
+        toast('¡Meta de agua cumplida! 💧', 'ok');
+      }
+      renderAgua(); renderHoy();
+    };
+  });
+  $('#resetAgua').onclick = () => {
+    if (!confirm('¿Reiniciar el agua de hoy a 0?')) return;
+    Dominio.agua.set(0);
+    renderAgua(); renderHoy();
+  };
+
+  const sem = Dominio.agua.semana();
+  const maxV = Math.max(meta, ...sem.map(s=>s.ml));
+  $('#aguaSemana').innerHTML = sem.map(s => {
+    const h = maxV ? Math.round(s.ml/maxV*100) : 0;
+    const fecha = new Date(s.iso+'T12:00');
+    const dia = DIAS_CORTOS[fecha.getDay()];
+    const lleno = s.ml >= meta;
+    return `<div class="agua-dia ${lleno?'lleno':''}">
+      <div class="bar"><i style="height:${h}%"></i></div>
+      <div class="lbl">${dia}</div>
+      <div class="ml">${(s.ml/1000).toFixed(1)}L</div>
+    </div>`;
+  }).join('');
+  const prom = Math.round(sem.reduce((a,b)=>a+b.ml,0)/7);
+  const dias = sem.filter(s => s.ml >= meta).length;
+  $('#aguaResumen').innerHTML = `Promedio: <b>${(prom/1000).toFixed(2)} L/día</b> · Días cumplidos: <b>${dias}/7</b>`;
+
+  $('#metaAguaInput').value = ajustes.metaAgua || 2000;
+  $('#vasoInput').value = ajustes.vaso || 250;
+}
+$('#guardarMetaAgua').onclick = () => {
+  ajustes.metaAgua = Math.max(500, Math.min(6000, parseInt($('#metaAguaInput').value,10)||2000));
+  ajustes.vaso = Math.max(100, Math.min(1000, parseInt($('#vasoInput').value,10)||250));
+  Storage.guardar(K.ajustes, ajustes);
+  auditar('ajustes_agua', { meta: ajustes.metaAgua, vaso: ajustes.vaso });
+  toast('Guardado ✅', 'ok');
+  renderAgua(); renderHoy(); renderAjustes();
+};
+
+/* =====================================================================
+   RENDER: COMIDAS
+   ===================================================================== */
+const ORDEN_COMIDAS = [
+  { tipo:'desayuno', label:'Desayuno', em:'🌅' },
+  { tipo:'almuerzo', label:'Almuerzo', em:'☀️' },
+  { tipo:'merienda', label:'Merienda', em:'🍵' },
+  { tipo:'cena', label:'Cena', em:'🌙' }
+];
+function renderComidas(){
+  const cont = $('#comidaGrid');
+  cont.innerHTML = ORDEN_COMIDAS.map(cm => {
+    const c = Dominio.comidas.porTipo(cm.tipo);
+    const meta = c ? [
+      c.hambre !== undefined && c.hambre !== null ? `Hambre ${c.hambre}/5` : '',
+      c.animo ? ({liviano:'🪶 Liviano', bien:'😊 Bien', pesado:'🪨 Pesado'})[c.animo] : ''
+    ].filter(Boolean).join(' · ') : '';
+    return `<div class="comida-card ${c?'':'vacio'}" data-tipo="${cm.tipo}">
+      <h4><span class="em">${cm.em}</span> ${cm.label}</h4>
+      <p>${c ? escapeHTML(c.texto) : 'Sin registrar'}</p>
+      ${meta ? `<div class="meta">${meta}</div>` : ''}
+    </div>`;
+  }).join('');
+  cont.querySelectorAll('[data-tipo]').forEach(b => {
+    b.onclick = () => abrirSheetComida(b.dataset.tipo);
+  });
+
+  const hoy = Dominio.comidas.porFecha();
+  const lista = $('#comidaLista');
+  if (!hoy.length){
+    lista.innerHTML = `<div class="empty">Todavía no registraste comidas hoy.</div>`;
+  } else {
+    lista.innerHTML = hoy.sort((a,b)=>a.ts-b.ts).map(c => {
+      const meta = ORDEN_COMIDAS.find(x => x.tipo === c.tipo);
+      return `<div class="mov-item">
+        <div class="em">${meta?meta.em:'🍴'}</div>
+        <div class="info">
+          <strong>${escapeHTML(c.texto)}</strong>
+          <small>${meta?meta.label:'Comida'} ${c.hambre!==null&&c.hambre!==undefined?'· hambre '+c.hambre+'/5':''} ${c.animo?'· '+({liviano:'🪶',bien:'😊',pesado:'🪨'})[c.animo]:''}</small>
+        </div>
+        <button class="del" data-del="${c.id}">🗑️</button>
+      </div>`;
+    }).join('');
+    lista.querySelectorAll('[data-del]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('¿Borrar este registro?')) return;
+        Dominio.comidas.borrar(b.dataset.del);
+        renderComidas(); renderHoy();
+      };
+    });
+  }
+}
+
+/* ===== SHEET COMIDA ===== */
+function abrirSheetComida(tipo){
+  const existente = Dominio.comidas.porTipo(tipo);
+  const meta = ORDEN_COMIDAS.find(x => x.tipo === tipo);
+  $('#comidaTitle').textContent = (existente ? 'Editar ' : 'Registrar ') + (meta ? meta.label : 'comida');
+  $('#c-tipo').value = tipo;
+  $('#c-id').value = existente ? existente.id : '';
+  $('#c-texto').value = existente ? existente.texto : '';
+  const hc = $('#c-hambre');
+  hc.innerHTML = '';
+  for (let i=0; i<=5; i++){
+    const b = document.createElement('button');
+    b.type='button'; b.textContent = i; b.dataset.val = i;
+    if (existente && existente.hambre === i) b.classList.add('on');
+    b.onclick = () => { [...hc.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); hc.dataset.value = i; };
+    hc.appendChild(b);
+  }
+  hc.dataset.value = existente && existente.hambre !== null && existente.hambre !== undefined ? existente.hambre : '';
+  $('#c-animo').querySelectorAll('[data-animo]').forEach(b => {
+    b.classList.toggle('on', existente && existente.animo === b.dataset.animo);
+    b.onclick = () => {
+      const actual = b.classList.contains('on');
+      $('#c-animo').querySelectorAll('[data-animo]').forEach(x => x.classList.remove('on'));
+      if (!actual) b.classList.add('on');
+    };
+  });
+  $('#c-quick').innerHTML = quickComidas.map(q => `<button class="quick-chip" data-q="${escapeHTML(q)}">${escapeHTML(q)}</button>`).join('');
+  $('#c-quick').querySelectorAll('[data-q]').forEach(b => {
+    b.onclick = () => {
+      const t = $('#c-texto');
+      t.value = t.value ? t.value + ', ' + b.dataset.q : b.dataset.q;
+    };
+  });
+  abrirSheet('sheetComida');
+}
+$('#guardarComida').onclick = () => {
+  const texto = $('#c-texto').value.trim();
+  if (!texto){ alert('Escribí qué comiste'); return; }
+  const hambreRaw = $('#c-hambre').dataset.value;
+  const animoEl = $('#c-animo').querySelector('.on');
+  Dominio.comidas.guardar({
+    id: $('#c-id').value || null,
+    fecha: hoyISO(),
+    tipo: $('#c-tipo').value,
+    texto,
+    hambre: hambreRaw === '' ? null : Number(hambreRaw),
+    animo: animoEl ? animoEl.dataset.animo : null
+  });
+  cerrarSheets();
+  chime(700, 0.2, 0.08);
+  renderComidas(); renderHoy();
+};
+
+/* =====================================================================
+   RENDER: MOVIMIENTO
+   ===================================================================== */
+const TIPOS_MOV = [
+  { tipo:'caminata', label:'Caminata', em:'🚶' },
+  { tipo:'gym', label:'Gym', em:'🏋️' },
+  { tipo:'yoga', label:'Yoga', em:'🧘' },
+  { tipo:'bici', label:'Bici', em:'🚴' },
+  { tipo:'correr', label:'Correr', em:'🏃' },
+  { tipo:'baile', label:'Baile', em:'💃' },
+  { tipo:'pileta', label:'Pileta', em:'🏊' },
+  { tipo:'deporte', label:'Deporte', em:'⚽' },
+  { tipo:'estiramiento', label:'Estiramiento', em:'🤸' }
+];
+function renderMovimiento(){
+  $('#movGrid').innerHTML = TIPOS_MOV.map(t => `
+    <button class="mov-tipo" data-mov="${t.tipo}">
+      <span class="em">${t.em}</span>
+      <strong>${t.label}</strong>
+    </button>
+  `).join('');
+  $('#movGrid').querySelectorAll('[data-mov]').forEach(b => {
+    b.onclick = () => abrirSheetMov(b.dataset.mov);
+  });
+
+  const hoy = Dominio.movimiento.porFecha();
+  const min = Dominio.movimiento.minutosHoy();
+  $('#movMinHoy').textContent = min + ' min';
+  const cont = $('#movListaHoy');
+  if (!hoy.length){
+    cont.innerHTML = `<div class="empty">Sin registros hoy.</div>`;
+  } else {
+    cont.innerHTML = hoy.sort((a,b)=>a.ts-b.ts).map(m => {
+      const t = TIPOS_MOV.find(x => x.tipo === m.tipo) || { em:'🎯', label:m.tipo };
+      return `<div class="mov-item">
+        <div class="em">${t.em}</div>
+        <div class="info">
+          <strong>${escapeHTML(m.nombre || t.label)}</strong>
+          <small>${m.dur} min ${m.int?('· '+({suave:'🌱 suave',media:'💪 media',alta:'🔥 alta'})[m.int]):''}${m.notas?' · '+escapeHTML(m.notas):''}</small>
+        </div>
+        <button class="del" data-del="${m.id}">🗑️</button>
+      </div>`;
+    }).join('');
+    cont.querySelectorAll('[data-del]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('¿Borrar este registro?')) return;
+        Dominio.movimiento.borrar(b.dataset.del);
+        renderMovimiento(); renderHoy(); renderRachas();
+      };
+    });
+  }
+
+  const sem = Dominio.movimiento.semana();
+  const meta = ajustes.metaMov || 30;
+  const maxV = Math.max(meta, ...sem.map(s=>s.min));
+  $('#movSemana').innerHTML = sem.map(s => {
+    const h = maxV ? Math.round(s.min/maxV*100) : 0;
+    const fecha = new Date(s.iso+'T12:00');
+    const dia = DIAS_CORTOS[fecha.getDay()];
+    return `<div class="agua-dia ${s.min>=meta?'lleno':''}">
+      <div class="bar"><i style="height:${h}%"></i></div>
+      <div class="lbl">${dia}</div>
+      <div class="ml">${s.min}m</div>
+    </div>`;
+  }).join('');
+  const prom = Math.round(sem.reduce((a,b)=>a+b.min,0)/7);
+  const cumplidos = sem.filter(s=>s.min>=meta).length;
+  $('#movResumen').innerHTML = `Promedio: <b>${prom} min/día</b> · Días cumplidos: <b>${cumplidos}/7</b>`;
+}
+
+/* ===== SHEET MOVIMIENTO ===== */
+function abrirSheetMov(tipo){
+  const t = TIPOS_MOV.find(x => x.tipo === tipo) || { label: tipo, em:'🎯' };
+  $('#movTitle').textContent = 'Registrar ' + t.label.toLowerCase();
+  $('#mv-id').value = '';
+  $('#mv-tipo').value = t.tipo;
+  $('#mv-nombre').value = t.label;
+  $('#mv-dur').value = '';
+  $('#mv-notas').value = '';
+  $('#mv-int').querySelectorAll('[data-int]').forEach(b => {
+    b.classList.remove('on');
+    b.onclick = () => {
+      $('#mv-int').querySelectorAll('[data-int]').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+    };
+  });
+  abrirSheet('sheetMovimiento');
+}
+$('#movOtro').onclick = () => {
+  $('#movTitle').textContent = 'Registrar otro movimiento';
+  $('#mv-id').value = '';
+  $('#mv-tipo').value = 'otro';
+  $('#mv-nombre').value = '';
+  $('#mv-dur').value = '';
+  $('#mv-notas').value = '';
+  $('#mv-int').querySelectorAll('[data-int]').forEach(b => b.classList.remove('on'));
+  abrirSheet('sheetMovimiento');
+};
+$('#guardarMov').onclick = () => {
+  const dur = parseInt($('#mv-dur').value,10);
+  if (!dur || dur < 1){ alert('Poné una duración en minutos'); return; }
+  const intEl = $('#mv-int').querySelector('.on');
+  Dominio.movimiento.guardar({
+    id: $('#mv-id').value || null,
+    fecha: hoyISO(),
+    tipo: $('#mv-tipo').value,
+    nombre: $('#mv-nombre').value.trim() || $('#mv-tipo').value,
+    dur,
+    int: intEl ? intEl.dataset.int : null,
+    notas: $('#mv-notas').value.trim()
+  });
+  cerrarSheets();
+  chime(660, 0.25, 0.1);
+  if (dur >= 30){
+    toast('¡Buen movimiento! 💪', 'ok');
+  }
+  renderMovimiento(); renderHoy(); renderRachas();
+};
+
+/* =====================================================================
+   RENDER: MINDFULNESS
+   ===================================================================== */
+function renderMindfulness(){
+  const cont = $('#mindHistorial');
+  const ult = mindfulnessHist.slice().reverse().slice(0,5);
+  if (!ult.length){
+    cont.innerHTML = `<div class="empty">Todavía no hiciste sesiones.</div>`;
+  } else {
+    cont.innerHTML = ult.map(m => {
+      const min = Math.round(m.durSeg/60);
+      const fecha = new Date(m.ts).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});
+      return `<div class="mov-item">
+        <div class="em">🧘</div>
+        <div class="info">
+          <strong>${escapeHTML(m.tipo)}</strong>
+          <small>${min} min · ${fecha}</small>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  const g = Dominio.gratitud.hoy();
+  const gc = $('#gratitudHoy');
+  if (g && g.items.filter(x=>x.trim()).length){
+    gc.innerHTML = g.items.filter(x=>x.trim()).map(i => `
+      <div style="padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.4">🌱 ${escapeHTML(i)}</div>
+    `).join('');
+  } else {
+    gc.innerHTML = `<div class="empty" style="padding:12px">Anotá algo que agradezcas de hoy.</div>`;
+  }
+}
+$('#gratitudBtn').onclick = abrirSheetGratitud;
+
+/* ===== SHEET GRATITUD ===== */
+function abrirSheetGratitud(){
+  const g = Dominio.gratitud.hoy();
+  $('#g-1').value = g ? (g.items[0]||'') : '';
+  $('#g-2').value = g ? (g.items[1]||'') : '';
+  $('#g-3').value = g ? (g.items[2]||'') : '';
+  abrirSheet('sheetGratitud');
+}
+$('#guardarGratitud').onclick = () => {
+  const items = [$('#g-1').value.trim(), $('#g-2').value.trim(), $('#g-3').value.trim()];
+  if (!items.filter(x=>x).length){ alert('Anotá al menos una'); return; }
+  Dominio.gratitud.guardar(items);
+  cerrarSheets();
+  chime(880, 0.25, 0.1);
+  renderMindfulness(); renderHoy();
+};
+
+/* =====================================================================
+   RESPIRACIÓN GUIADA POR VOZ
+   ===================================================================== */
+const PATRONES = {
+  cuadrada: {
+    nombre:'Respiración cuadrada',
+    fases:[
+      { n:'Inhalá', seg:4, tipo:'in' },
+      { n:'Sostené', seg:4, tipo:'holdUp' },
+      { n:'Exhalá', seg:4, tipo:'out' },
+      { n:'Sostené', seg:4, tipo:'holdDown' }
+    ],
+    ciclos:6
+  },
+  '478': {
+    nombre:'Respiración 4-7-8',
+    fases:[
+      { n:'Inhalá', seg:4, tipo:'in' },
+      { n:'Sostené', seg:7, tipo:'holdUp' },
+      { n:'Exhalá', seg:8, tipo:'out' }
+    ],
+    ciclos:4
+  },
+  coherencia: {
+    nombre:'Coherencia cardíaca',
+    fases:[
+      { n:'Inhalá', seg:5, tipo:'in' },
+      { n:'Exhalá', seg:5, tipo:'out' }
+    ],
+    ciclos:6
+  }
+};
+
+let sesion = null;
+
+function abrirRespiracion(tipo){
+  const overlay = $('#breathOverlay');
+  overlay.classList.add('show');
+  $('#bTitle').textContent = tipo === 'bodyscan' ? 'Body scan' : (tipo === 'libre' ? 'Meditación libre' : (PATRONES[tipo]?.nombre || 'Respiración'));
+  $('#bFase').textContent = 'Preparate';
+  $('#bCont').textContent = '3';
+  $('#bInfo').innerHTML = `<strong>Encontrá una posición cómoda</strong>Cerrá los ojos cuando estés listo/a. Tocá Empezar.`;
+  $('#bPlay').textContent = '▶ Empezar';
+  $('#bPlay').style.display = '';
+  $('#bStop').style.display = '';
+  $('#bCircle').style.transform = 'scale(.6)';
+  $('#bCircle').style.transition = 'transform .4s ease';
+  callar();
+  sesion = { tipo, activo:false, cancelado:false, corriendo:false };
+}
+
+$('#bClose').onclick = cerrarRespiracion;
+$('#bStop').onclick = () => {
+  if (sesion){ sesion.cancelado = true; sesion.activo = false; }
+  callar();
+  $('#bPlay').textContent = '▶ Empezar';
+  sesion.corriendo = false;
+};
+$('#bPlay').onclick = () => {
+  if (!sesion) return;
+  if (sesion.corriendo){
+    sesion.cancelado = true; sesion.activo = false;
+    callar();
+    sesion.corriendo = false;
+    $('#bPlay').textContent = '▶ Continuar';
+    return;
+  }
+  sesion.cancelado = false;
+  sesion.activo = true;
+  sesion.corriendo = true;
+  $('#bPlay').textContent = '⏸ Pausar';
+  correrSesion(sesion.tipo);
+};
+
+function cerrarRespiracion(){
+  if (sesion){ sesion.cancelado = true; sesion.activo = false; sesion.corriendo = false; }
+  callar();
+  $('#breathOverlay').classList.remove('show');
+  sesion = null;
+}
+
+async function correrSesion(tipo){
+  if (tipo === 'libre'){
+    await correrLibre();
+    return;
+  }
+  if (tipo === 'bodyscan'){
+    await correrBodyScan();
+    return;
+  }
+  const patron = PATRONES[tipo];
+  if (!patron) return;
+
+  hablar(patron.nombre + '. Vamos a hacer ' + patron.ciclos + ' ciclos. Empezamos.');
+  await esperar(3200);
+  if (!sesion || sesion.cancelado) return;
+
+  for (let c = 0; c < patron.ciclos; c++){
+    if (!sesion || sesion.cancelado) return;
+    for (const fase of patron.fases){
+      if (!sesion || sesion.cancelado) return;
+      await correrFase(fase);
+    }
+    chime(660, 0.25, 0.1);
+    await esperar(400);
+  }
+  chime(880, 0.5, 0.14);
+  hablar('Muy bien. Podés abrir los ojos cuando estés listo.');
+  $('#bFase').textContent = 'Listo';
+  $('#bCont').textContent = '✓';
+  $('#bInfo').innerHTML = `<strong>Sesión completada</strong>Tomate un momento antes de seguir.`;
+  $('#bCircle').style.transition = 'transform 1s ease';
+  $('#bCircle').style.transform = 'scale(1)';
+  Dominio.mindfulness.guardar(patron.nombre, patron.fases.reduce((a,b)=>a+b.seg,0)*patron.ciclos);
+  setTimeout(() => {
+    if (sesion && !sesion.cancelado) cerrarRespiracion();
+    renderMindfulness(); renderHoy(); renderRachas();
+  }, 4500);
+}
+
+async function correrFase(fase){
+  $('#bFase').textContent = fase.n;
+  hablar(fase.n);
+  const circle = $('#bCircle');
+  circle.style.transition = `transform ${fase.seg}s ${fase.tipo==='out'?'ease-in':'ease-out'}`;
+  if (fase.tipo === 'in') circle.style.transform = 'scale(1)';
+  else if (fase.tipo === 'out') circle.style.transform = 'scale(.6)';
+  for (let s = fase.seg; s >= 1; s--){
+    if (!sesion || sesion.cancelado) return;
+    $('#bCont').textContent = s;
+    await esperar(1000);
+  }
+}
+async function correrLibre(){
+  const min = prompt('¿Cuántos minutos querés meditar?', '5');
+  if (!min){ sesion.cancelado = true; return; }
+  const minutos = Math.max(1, Math.min(60, parseInt(min,10)||5));
+  hablar(`Meditación de ${minutos} minutos. Cuando quieras, cerrá los ojos.`);
+  $('#bFase').textContent = 'Meditación';
+  $('#bInfo').innerHTML = `<strong>Respirá natural</strong>Campanas suaves cada minuto.`;
+  const totalSeg = minutos*60;
+  for (let s = totalSeg; s >= 1; s--){
+    if (!sesion || sesion.cancelado) return;
+    const m = Math.floor(s/60), ss = s%60;
+    $('#bCont').textContent = `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+    if (s % 60 === 0 && s !== totalSeg){ chime(520, 0.6, 0.09); }
+    await esperar(1000);
+  }
+  chime(880, 0.6, 0.15);
+  hablar('Terminó la meditación. Abrí los ojos despacio.');
+  $('#bFase').textContent = 'Listo';
+  $('#bCont').textContent = '✓';
+  Dominio.mindfulness.guardar('Meditación libre', totalSeg);
+  setTimeout(() => {
+    if (sesion && !sesion.cancelado) cerrarRespiracion();
+    renderMindfulness(); renderHoy(); renderRachas();
+  }, 4500);
+}
+async function correrBodyScan(){
+  const guion = [
+    'Acostate o sentate cómodo. Cerrá los ojos.',
+    'Llevá la atención a los pies. Notá el contacto con el suelo. Sin juzgar.',
+    'Subí a las pantorrillas. ¿Hay tensión? Soltala.',
+    'Rodillas y muslos. Dejalos descansar.',
+    'Cadera y pelvis. Respirá ahí.',
+    'Abdomen. Sentí cómo sube y baja con la respiración.',
+    'Pecho y espalda. Aflojá los hombros.',
+    'Manos y brazos. Soltá los dedos.',
+    'Cuello y mandíbula. Aflojá la lengua.',
+    'Cara. Frente, ojos, mejillas. Todo suave.',
+    'Todo el cuerpo. Respirá profundo.',
+    'Muy bien. Abrí los ojos cuando estés listo.'
+  ];
+  for (const frase of guion){
+    if (!sesion || sesion.cancelado) return;
+    $('#bFase').textContent = 'Body scan';
+    $('#bInfo').innerHTML = `<em style="font-size:14.5px;color:#e6f5ec;font-style:normal;line-height:1.5">${escapeHTML(frase)}</em>`;
+    hablar(frase);
+    await esperar(9000);
+  }
+  Dominio.mindfulness.guardar('Body scan', guion.length*9);
+  chime(880, 0.5, 0.14);
+  setTimeout(() => {
+    if (sesion && !sesion.cancelado) cerrarRespiracion();
+    renderMindfulness(); renderHoy(); renderRachas();
+  }, 3000);
+}
+function esperar(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+$$('[data-patron]').forEach(c => {
+  c.onclick = () => abrirRespiracion(c.dataset.patron);
+});
+
+/* =====================================================================
+   RENDER: COMPRAS
+   ===================================================================== */
+const CATS = {
+  verduleria:{ label:'🥬 Frutas y verduras', orden:1 },
+  carnes:{ label:'🥩 Carnes y pescados', orden:2 },
+  lacteos:{ label:'🧀 Lácteos y huevos', orden:3 },
+  almacen:{ label:'🥫 Almacén', orden:4 },
+  congelados:{ label:'🧊 Congelados', orden:5 },
+  bebidas:{ label:'🥤 Bebidas', orden:6 },
+  limpieza:{ label:'🧼 Limpieza', orden:7 },
+  otros:{ label:'📦 Otros', orden:8 }
+};
+function renderCompras(){
+  const cont = $('#compraLista');
+  const lista = Dominio.compras.listar();
+  const pendientes = lista.filter(c => !c.comprado).length;
+  $('#compraPend').textContent = pendientes;
+  if (!lista.length){
+    cont.innerHTML = `<div class="empty">Sin ítems. Agregá lo que falte en casa.</div>`;
+    return;
+  }
+  const grupos = {};
+  lista.forEach(c => {
+    const k = c.cat || 'otros';
+    (grupos[k] = grupos[k] || []).push(c);
+  });
+  const cats = Object.keys(grupos).sort((a,b) => (CATS[a]?.orden||99) - (CATS[b]?.orden||99));
+  let html = '';
+  cats.forEach(cat => {
+    const items = grupos[cat].sort((a,b) => (a.comprado?1:0)-(b.comprado?1:0) || a.ts-b.ts);
+    const pend = items.filter(i => !i.comprado).length;
+    html += `<div class="compra-cat">
+      <h4>${CATS[cat]?.label || cat}<span class="n">${pend}</span></h4>
+      ${items.map(c => `
+        <div class="compra-item ${c.comprado?'comprado':''}">
+          <div class="chk" data-toggle="${c.id}"></div>
+          <div class="txt">${escapeHTML(c.texto)}</div>
+          <button class="del" data-del="${c.id}">🗑️</button>
+        </div>
+      `).join('')}
+    </div>`;
+  });
+  cont.innerHTML = html;
+  cont.querySelectorAll('[data-toggle]').forEach(b => {
+    b.onclick = () => {
+      Dominio.compras.toggle(b.dataset.toggle);
+      chime(700, 0.15, 0.06);
+      renderCompras();
+    };
+  });
+  cont.querySelectorAll('[data-del]').forEach(b => {
+    b.onclick = () => { Dominio.compras.borrar(b.dataset.del); renderCompras(); };
+  });
+}
+$('#compraAgregar').onclick = () => {
+  const t = $('#compraNueva').value.trim();
+  if (!t) return;
+  Dominio.compras.agregar(t, $('#compraCategoria').value);
+  $('#compraNueva').value = '';
+  $('#compraNueva').focus();
+  renderCompras();
+};
+$('#compraNueva').addEventListener('keydown', e => {
+  if (e.key === 'Enter'){ e.preventDefault(); $('#compraAgregar').click(); }
+});
+$('#compraLimpiar').onclick = () => {
+  const n = Dominio.compras.limpiarTildados();
+  if (!n){ toast('No hay tildados'); return; }
+  toast(`${n} ítem${n>1?'s':''} limpiado${n>1?'s':''}`, 'ok');
+  renderCompras();
+};
+
+/* =====================================================================
+   RENDER: RACHAS
+   ===================================================================== */
+const LOGROS = [
+  { id:'agua3', em:'💧', txt:'3 días con tu meta de agua', check: () => Dominio.rachas.agua() >= 3 },
+  { id:'agua7', em:'🌊', txt:'7 días con tu meta de agua', check: () => Dominio.rachas.agua() >= 7 },
+  { id:'agua30', em:'🏆', txt:'30 días con tu meta de agua', check: () => Dominio.rachas.agua() >= 30 },
+  { id:'mov3', em:'👟', txt:'3 días moviéndote 10+ min', check: () => Dominio.movimiento.streak() >= 3 },
+  { id:'mov7', em:'🔥', txt:'7 días moviéndote', check: () => Dominio.movimiento.streak() >= 7 },
+  { id:'mind3', em:'🧘', txt:'3 días de mindfulness', check: () => Dominio.mindfulness.streak() >= 3 },
+  { id:'mind7', em:'🕊️', txt:'7 días de mindfulness', check: () => Dominio.mindfulness.streak() >= 7 },
+  { id:'com3', em:'🍽️', txt:'3 días registrando comidas', check: () => Dominio.comidas.streak() >= 3 },
+  { id:'com7', em:'🍳', txt:'7 días registrando comidas', check: () => Dominio.comidas.streak() >= 7 }
+];
+function renderRachas(){
+  const r = [
+    { em:'💧', n: Dominio.rachas.agua(), label:'Agua', best: Dominio.rachas.mejorAgua(), cold: Dominio.rachas.agua()===0 },
+    { em:'🏃', n: Dominio.movimiento.streak(), label:'Movimiento', cold: Dominio.movimiento.streak()===0 },
+    { em:'🧘', n: Dominio.mindfulness.streak(), label:'Mindfulness', cold: Dominio.mindfulness.streak()===0 },
+    { em:'🍽️', n: Dominio.comidas.streak(), label:'Comidas', cold: Dominio.comidas.streak()===0 }
+  ];
+  $('#rachaGrid').innerHTML = r.map(x => `
+    <div class="racha-card ${x.cold?'cold':''}">
+      <span class="fire">${x.cold ? '💤' : '🔥'}</span>
+      <b>${x.n}</b>
+      <small>${x.label}</small>
+      ${x.best !== undefined ? `<div class="best">Mejor: ${x.best} día${x.best===1?'':'s'}</div>` : ''}
+    </div>
+  `).join('');
+
+  const logros = LOGROS.map(l => ({ ...l, ok: l.check() }));
+  $('#logrosLista').innerHTML = logros.map(l => `
+    <div class="mov-item" style="opacity:${l.ok?1:.45}">
+      <div class="em">${l.ok? l.em : '🔒'}</div>
+      <div class="info">
+        <strong>${l.txt}</strong>
+        <small>${l.ok ? '✅ Desbloqueado' : 'Todavía no'}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* =====================================================================
+   RENDER: AJUSTES (clínico)
+   ===================================================================== */
+function renderAjustes(){
+  $('#setNombre').value = ajustes.nombre || '';
+  $('#setVoz').checked = ajustes.voz;
+  $('#setVel').value = ajustes.velocidad || 1;
+  $('#setMetaAgua').value = ajustes.metaAgua || 2000;
+  $('#setMetaMov').value = ajustes.metaMov || 30;
+
+  const c = consentimiento;
+  $('#consentInfo').innerHTML = `
+    <div class="legal-box">
+      <strong>Consentimiento v${c.version}</strong><br>
+      Otorgado: ${new Date(c.fecha).toLocaleDateString('es-AR')}<br>
+      Estado: ${c.revocado ? '<span style="color:#e5484d">REVOCADO</span>' : '<span style="color:#22b573">vigente</span>'}<br><br>
+      <span style="font-size:12px;color:#4a6583">${escapeHTML(c.texto)}</span>
+    </div>
+  `;
+  $('#marcoLegalBox').innerHTML = Object.values(MARCO_LEGAL).map(ley => `
+    <strong>${ley.nombre}</strong>
+    <ul>${ley.puntos.map(p => `<li>${p}</li>`).join('')}</ul>
+  `).join('');
+  const integ = verificarIntegridad();
+  $('#integridadAudit').innerHTML = integ.ok
+    ? `✅ Cadena de auditoría íntegra · <b>${integ.total}</b> eventos encadenados.`
+    : `⚠️ Cadena rota en el evento #${integ.indiceRoto}.`;
+}
+$('#guardarAjustes').onclick = () => {
+  ajustes.nombre = $('#setNombre').value.trim();
+  ajustes.voz = $('#setVoz').checked;
+  ajustes.velocidad = parseFloat($('#setVel').value) || 1;
+  Storage.guardar(K.ajustes, ajustes);
+  actualizarMute();
+  auditar('ajustes_guardados', {});
+  toast('Guardado ✅', 'ok');
+  hablar('Ajustes guardados.');
+};
+$('#guardarMetas').onclick = () => {
+  ajustes.metaAgua = Math.max(500, Math.min(6000, parseInt($('#setMetaAgua').value,10)||2000));
+  ajustes.metaMov = Math.max(0, Math.min(180, parseInt($('#setMetaMov').value,10)||30));
+  Storage.guardar(K.ajustes, ajustes);
+  auditar('metas_guardadas', { agua: ajustes.metaAgua, mov: ajustes.metaMov });
+  toast('Metas guardadas ✅', 'ok');
+  renderAgua(); renderHoy(); renderRachas();
+};
+$('#revocarConsent').onclick = () => {
+  if (!confirm('¿Revocar consentimiento? Vas a poder seguir usando la app, pero queda registrado.')) return;
+  consentimiento.revocado = true;
+  consentimiento.fechaRevocacion = Date.now();
+  Storage.guardar(K.consentimiento, consentimiento);
+  auditar('consentimiento_revocado', {});
+  renderAjustes();
+  toast('Consentimiento revocado', 'warn');
+};
+$('#verAuditoria').onclick = () => {
+  const cont = $('#auditLista');
+  if (!auditLog.length){ cont.innerHTML = '<div class="empty">Sin eventos.</div>'; }
+  else {
+    cont.innerHTML = auditLog.slice().reverse().slice(0,60).map(a => `
+      <div class="audit-log">
+        <span>${a.accion.replace(/_/g,' ')} <span class="hash-chip">#${a.hashActual.slice(0,6)}</span></span>
+        <span style="font-size:11px">${new Date(a.ts).toLocaleString('es-AR')}</span>
+      </div>
+    `).join('');
+  }
+  abrirSheet('sheetAudit');
+};
+
+/* =====================================================================
+   RENDER: SKILLS / RUTINAS CORTAS
+   ===================================================================== */
+const SKILLS = {
+  estiramiento: {
+    title:'🤸 Estiramiento corto (2 min)',
+    body:`
+      <p class="hint">Hacelo despacio. Si algo duele, pará.</p>
+      <ol style="font-size:14px;line-height:1.7;padding-left:22px">
+        <li><b>Cuello:</b> girá despacio a cada lado, 3 veces.</li>
+        <li><b>Hombros:</b> subí y bajá, 10 veces.</li>
+        <li><b>Espalda alta:</b> entrelazá los dedos y estirá los brazos al frente, 20 seg.</li>
+        <li><b>Costados:</b> inclinate suave a cada lado, 20 seg.</li>
+        <li><b>Isquios:</b> parado/a, un pie adelante, bajá el torso, 20 seg por lado.</li>
+        <li><b>Respiración:</b> 3 respiraciones profundas.</li>
+      </ol>
+      <button class="btn btn-secondary" style="width:100%;margin-top:14px" onclick="document.querySelector('#sheetSkill [data-close-sheet]').click(); Sportin.abrirRespiracion('coherencia');">🧘 Cerrar con respiración</button>
+    `
+  },
+  movilidad: {
+    title:'🦴 Movilidad cuello y hombros',
+    body:`
+      <p class="hint">Ideal si pasás muchas horas frente a pantallas.</p>
+      <ol style="font-size:14px;line-height:1.7;padding-left:22px">
+        <li><b>Sí y no:</b> asentí 10 veces, negá 10 veces.</li>
+        <li><b>Orejas al hombro:</b> incliná suave a cada lado, 15 seg.</li>
+        <li><b>Círculos de hombros:</b> 10 adelante, 10 atrás.</li>
+        <li><b>Abre pecho:</b> entrelazá manos atrás y abrí, 20 seg.</li>
+        <li><b>Gato-vaca suave:</b> 8 repeticiones si podés en cuatro patas.</li>
+      </ol>
+    `
+  }
+};
+function abrirSkill(k){
+  const s = SKILLS[k];
+  if (!s) return;
+  $('#skillTitle').textContent = s.title;
+  $('#skillBody').innerHTML = s.body;
+  abrirSheet('sheetSkill');
+}
+
+/* =====================================================================
+   NAVEGACIÓN / SHEETS
+   ===================================================================== */
+function irA(vista){
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-'+vista));
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === vista));
+  $('#views').scrollTop = 0;
+  if (vista==='hoy') renderHoy();
+  if (vista==='agua') renderAgua();
+  if (vista==='comidas') renderComidas();
+  if (vista==='movimiento') renderMovimiento();
+  if (vista==='mindfulness') renderMindfulness();
+  if (vista==='compras') renderCompras();
+  if (vista==='rachas') renderRachas();
+  if (vista==='ajustes') renderAjustes();
+  cerrarDrawer();
+}
+$$('.nav-item').forEach(b => b.onclick = () => irA(b.dataset.view));
+
+const drawer = $('#drawer'), overlay = $('#overlay');
+$('#menuBtn').onclick = () => { drawer.classList.add('show'); overlay.classList.add('show'); };
+function cerrarDrawer(){
+  drawer.classList.remove('show');
+  if (!$$('.sheet.show').length) overlay.classList.remove('show');
+}
+overlay.onclick = () => {
+  cerrarDrawer();
+  $$('.sheet.show').forEach(s => s.classList.remove('show'));
+  overlay.classList.remove('show');
+};
+function abrirSheet(id){
+  $$('.sheet.show').forEach(s => s.classList.remove('show'));
+  $('#'+id).classList.add('show');
+  overlay.classList.add('show');
+}
+function cerrarSheets(){
+  $$('.sheet.show').forEach(s => s.classList.remove('show'));
+  overlay.classList.remove('show');
+}
+$$('[data-close-sheet]').forEach(b => b.onclick = cerrarSheets);
+
+/* =====================================================================
+   MUTE
+   ===================================================================== */
+const muteBtn = $('#muteBtn');
+function actualizarMute(){
+  muteBtn.textContent = ajustes.voz ? '🔊' : '🔇';
+  muteBtn.style.opacity = ajustes.voz ? '1' : '.55';
+}
+muteBtn.onclick = () => {
+  ajustes.voz = !ajustes.voz;
+  Storage.guardar(K.ajustes, ajustes);
+  actualizarMute();
+  if (!ajustes.voz) callar();
+  else hablar('Voz activada.');
+};
+
+/* =====================================================================
+   EXPORT / BORRAR
+   ===================================================================== */
+window.Sportin = {
+  irA, abrirSkill, abrirRespiracion,
+  exportar(){
+    auditar('exportacion_solicitada', {});
+    const data = {
+      schemaVersion: SCHEMA_VERSION,
+      ownerId: OWNER_ID,
+      exportado: new Date().toISOString(),
+      marcoLegal: MARCO_LEGAL,
+      consentimiento,
+      ajustes,
+      agua, comidas, movimientos, mindfulness: mindfulnessHist, gratitud,
+      compras, auditLog
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `sportin-${hoyISO()}.json`; a.click();
+    URL.revokeObjectURL(url);
+    toast('Datos exportados ✅', 'ok');
+  },
+  borrarTodo(){
+    if (!confirm('¿Borrar TODO? No se puede deshacer.')) return;
+    if (!confirm('Última confirmación: se borran agua, comidas, movimiento, mindfulness, gratitud, compras y auditoría.')) return;
+    auditar('borrado_total_solicitado', {});
+    Object.values(K).forEach(k => Storage.borrar(k));
+    location.reload();
+  }
+};
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+function iniciar(){
+  pintarMascotas();
+  actualizarMute();
+  renderHoy();
+  renderAgua();
+  renderComidas();
+  renderMovimiento();
+  renderMindfulness();
+  renderCompras();
+  renderRachas();
+  renderAjustes();
+  auditar('app_iniciada', { version: SCHEMA_VERSION });
+
+  if (ajustes.voz){
+    setTimeout(() => {
+      const h = new Date().getHours();
+      const s = h<12?'Buenos días':h<20?'Buenas tardes':'Buenas noches';
+      hablar(`${s}${ajustes.nombre?' '+ajustes.nombre:''}. Soy Sportín. ¿Cómo va tu día?`);
+    }, 700);
+  }
+}
+
+iniciar();
+</script>
+</body>
+</html>
