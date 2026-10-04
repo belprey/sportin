@@ -325,6 +325,30 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 /* ==== WELCOME ==== */
 .welcome{text-align:center;padding:10px 6px 4px}
 
+/* ==== GIFT OVERLAY ==== */
+.gift-overlay{position:fixed;inset:0;z-index:900;
+  background:linear-gradient(160deg,#0e1c15,#132b1f 60%,#0e1c15);
+  color:#e6f5ec;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top) + 30px) 26px calc(env(safe-area-inset-bottom) + 30px);
+  text-align:center;animation:giftFade .6s ease}
+@keyframes giftFade{from{opacity:0}to{opacity:1}}
+.gift-overlay .gift-mascot{width:130px;height:169px;margin-bottom:6px;
+  filter:drop-shadow(0 10px 30px rgba(34,181,115,.35))}
+.gift-overlay .gift-tag{font-size:11px;letter-spacing:3px;color:#7fc7a1;
+  font-weight:700;text-transform:uppercase;margin-bottom:14px}
+.gift-overlay h1{font-size:27px;margin:0 0 6px;letter-spacing:-.6px;color:#fff}
+.gift-overlay p{font-size:14.5px;line-height:1.6;color:#b9d8c6;
+  max-width:340px;margin:0 0 20px;font-style:italic}
+.gift-overlay .gift-firma{font-size:13px;color:#7fc7a1;margin-bottom:30px;
+  font-weight:600;letter-spacing:.3px}
+.gift-overlay button{background:linear-gradient(135deg,#22b573,#149a5a);color:#fff;
+  border:none;padding:15px 36px;border-radius:15px;font-family:inherit;
+  font-weight:800;font-size:15.5px;cursor:pointer;transition:.15s;
+  box-shadow:0 12px 34px rgba(34,181,115,.45);letter-spacing:.2px}
+.gift-overlay button:active{transform:scale(.96)}
+.gift-overlay .gift-hint{font-size:11px;color:#4f7a61;margin-top:24px;max-width:280px;line-height:1.5}
+.gift-overlay.out{opacity:0;transition:opacity .5s ease}
+
 @media (max-width:380px){
   .h1{font-size:18px}
   .comida-grid{grid-template-columns:1fr}
@@ -332,6 +356,8 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   .mov-grid{grid-template-columns:repeat(2,1fr)}
   .agua-ring{width:150px;height:150px}
   .agua-ring .ring-center b{font-size:28px}
+  .gift-overlay h1{font-size:23px}
+  .gift-overlay p{font-size:13.5px}
 }
 </style>
 </head>
@@ -343,7 +369,6 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     <circle class="ant-ball" cx="50" cy="8" r="6"/>
     <rect class="body" x="16" y="26" width="68" height="98" rx="21"/>
     <rect class="screen" x="25" y="36" width="50" height="62" rx="12"/>
-    <!-- Vincha de gimnasio -->
     <rect class="headband" x="11" y="40" width="78" height="13" rx="6.5"/>
     <rect class="headband-stripe" x="13" y="44.5" width="74" height="2"/>
     <ellipse class="eye left" cx="39" cy="58" rx="5.2" ry="7"/>
@@ -727,6 +752,26 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
    SPORTÍN v1 · Cuidado personal · Modo clínico
    ===================================================================== */
 
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║                                                                  ║
+   ║   ⚙️  EDITÁ ESTO — SOLO ESTAS 3 LÍNEAS                           ║
+   ║                                                                  ║
+   ║   Poné su nombre, tu nombre, y (si querés) cambiá el mensaje.   ║
+   ║   Nada más. El resto ya está listo.                              ║
+   ║                                                                  ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+const REGALO = {
+  para:    'La nicolases💕]',            // ← su nombre o como le decís
+  de:      '[LaBelenez❤️]',            // ← tu nombre o como firmás
+  mensaje: 'Este proyecto empezó con una idea tuya. Yo solo le puse botones. Gracias por inspirarme.',
+  activo:  true                      // ← si algún día querés desactivar la portada, poné false
+};
+
+/* ══════════════════════════════════════════════════════════════════ */
+/* Fin de la zona editable. A partir de acá no hace falta tocar nada. */
+/* ══════════════════════════════════════════════════════════════════ */
+
 const SCHEMA_VERSION = 1;
 
 const MARCO_LEGAL = Object.freeze({
@@ -745,17 +790,18 @@ const MARCO_LEGAL = Object.freeze({
 });
 
 const K = {
-  ajustes:'sportin.v1.ajustes',
-  agua:'sportin.v1.agua',
-  comidas:'sportin.v1.comidas',
-  movimientos:'sportin.v1.movs',
-  mindfulness:'sportin.v1.mind',
-  gratitud:'sportin.v1.grat',
-  compras:'sportin.v1.compras',
-  quickComidas:'sportin.v1.quickCom',
-  audit:'sportin.v1.audit',
-  consentimiento:'sportin.v1.consent',
-  usuario:'sportin.v1.usuario'
+  ajustes:'sportin.regalo.ajustes',
+  agua:'sportin.regalo.agua',
+  comidas:'sportin.regalo.comidas',
+  movimientos:'sportin.regalo.movs',
+  mindfulness:'sportin.regalo.mind',
+  gratitud:'sportin.regalo.grat',
+  compras:'sportin.regalo.compras',
+  quickComidas:'sportin.regalo.quickCom',
+  audit:'sportin.regalo.audit',
+  consentimiento:'sportin.regalo.consent',
+  usuario:'sportin.regalo.usuario',
+  giftSeen:'sportin.regalo.giftSeen'
 };
 
 const Storage = {
@@ -764,13 +810,13 @@ const Storage = {
   borrar(k){ localStorage.removeItem(k); }
 };
 
-const ACTOR = Storage.cargar(K.usuario, null) || { id:'sportin-local', creado:Date.now() };
+const ACTOR = Storage.cargar(K.usuario, null) || { id:'sportin-para-vos', creado:Date.now() };
 Storage.guardar(K.usuario, ACTOR);
 const OWNER_ID = ACTOR.id;
 
 /* ===== ESTADO ===== */
 let ajustes = Object.assign({
-  nombre:'', voz:true, velocidad:1,
+  nombre: REGALO.para, voz:true, velocidad:1,
   metaAgua:2000, vaso:250, metaMov:30
 }, Storage.cargar(K.ajustes, {}));
 let agua = Storage.cargar(K.agua, {});
@@ -1081,6 +1127,34 @@ const Dominio = {
 };
 
 /* =====================================================================
+   BIENVENIDA REGALO
+   ===================================================================== */
+function mostrarBienvenidaRegalo(){
+  if (!REGALO.activo) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'gift-overlay';
+  overlay.innerHTML = `
+    <div class="gift-mascot">${crearMascotaHTML()}</div>
+    <div class="gift-tag">versión 1 · para vos</div>
+    <h1>Hola, ${escapeHTML(REGALO.para)}</h1>
+    <p>“${escapeHTML(REGALO.mensaje)}”</p>
+    <div class="gift-firma">— ${escapeHTML(REGALO.de)}</div>
+    <button id="regaloOk">Empezar 🌱</button>
+    <div class="gift-hint">Todo lo que registres queda solo en este dispositivo. Nada viaja a ningún servidor.</div>
+  `;
+  document.body.appendChild(overlay);
+
+  const btn = document.getElementById('regaloOk');
+  btn.onclick = () => {
+    overlay.classList.add('out');
+    setTimeout(() => overlay.remove(), 500);
+    setTimeout(() => {
+      hablar(`Hola ${REGALO.para}. Soy Sportín. Me hizo ${REGALO.de} para vos. ¿Arrancamos?`);
+    }, 400);
+  };
+}
+
+/* =====================================================================
    RENDER: HOY
    ===================================================================== */
 function renderHoy(){
@@ -1104,6 +1178,21 @@ function renderHoy(){
       <div style="width:110px;height:138px;margin:0 auto 6px">${crearMascotaHTML()}</div>
       <h1 style="margin:6px 0 2px;font-size:22px">${saludo}${escapeHTML(nombre)}</h1>
       <p style="margin:0;color:var(--muted);font-size:13.5px;text-transform:capitalize">${fmtFecha(hoyISO())}</p>
+    </div>
+  `;
+
+  /* ── Tarjeta del regalo: persistente, discreta, de los dos ── */
+  html += `
+    <div class="card" style="background:linear-gradient(135deg,#eaf7ee,#dbf3e5);border:1px solid #bfe6cf;padding:13px 14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">💚</span>
+        <div style="flex:1;min-width:0">
+          <strong style="font-size:13.5px;color:#0f3d22">Un proyecto nuestro</strong>
+          <div style="font-size:12px;color:#3b6d52;margin-top:2px;line-height:1.4">
+            Hecho a mano por ${escapeHTML(REGALO.de)} para ${escapeHTML(REGALO.para)}.
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -2051,101 +2140,4 @@ $$('.nav-item').forEach(b => b.onclick = () => irA(b.dataset.view));
 
 const drawer = $('#drawer'), overlay = $('#overlay');
 $('#menuBtn').onclick = () => { drawer.classList.add('show'); overlay.classList.add('show'); };
-function cerrarDrawer(){
-  drawer.classList.remove('show');
-  if (!$$('.sheet.show').length) overlay.classList.remove('show');
-}
-overlay.onclick = () => {
-  cerrarDrawer();
-  $$('.sheet.show').forEach(s => s.classList.remove('show'));
-  overlay.classList.remove('show');
-};
-function abrirSheet(id){
-  $$('.sheet.show').forEach(s => s.classList.remove('show'));
-  $('#'+id).classList.add('show');
-  overlay.classList.add('show');
-}
-function cerrarSheets(){
-  $$('.sheet.show').forEach(s => s.classList.remove('show'));
-  overlay.classList.remove('show');
-}
-$$('[data-close-sheet]').forEach(b => b.onclick = cerrarSheets);
-
-/* =====================================================================
-   MUTE
-   ===================================================================== */
-const muteBtn = $('#muteBtn');
-function actualizarMute(){
-  muteBtn.textContent = ajustes.voz ? '🔊' : '🔇';
-  muteBtn.style.opacity = ajustes.voz ? '1' : '.55';
-}
-muteBtn.onclick = () => {
-  ajustes.voz = !ajustes.voz;
-  Storage.guardar(K.ajustes, ajustes);
-  actualizarMute();
-  if (!ajustes.voz) callar();
-  else hablar('Voz activada.');
-};
-
-/* =====================================================================
-   EXPORT / BORRAR
-   ===================================================================== */
-window.Sportin = {
-  irA, abrirSkill, abrirRespiracion,
-  exportar(){
-    auditar('exportacion_solicitada', {});
-    const data = {
-      schemaVersion: SCHEMA_VERSION,
-      ownerId: OWNER_ID,
-      exportado: new Date().toISOString(),
-      marcoLegal: MARCO_LEGAL,
-      consentimiento,
-      ajustes,
-      agua, comidas, movimientos, mindfulness: mindfulnessHist, gratitud,
-      compras, auditLog
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `sportin-${hoyISO()}.json`; a.click();
-    URL.revokeObjectURL(url);
-    toast('Datos exportados ✅', 'ok');
-  },
-  borrarTodo(){
-    if (!confirm('¿Borrar TODO? No se puede deshacer.')) return;
-    if (!confirm('Última confirmación: se borran agua, comidas, movimiento, mindfulness, gratitud, compras y auditoría.')) return;
-    auditar('borrado_total_solicitado', {});
-    Object.values(K).forEach(k => Storage.borrar(k));
-    location.reload();
-  }
-};
-
-/* =====================================================================
-   INIT
-   ===================================================================== */
-function iniciar(){
-  pintarMascotas();
-  actualizarMute();
-  renderHoy();
-  renderAgua();
-  renderComidas();
-  renderMovimiento();
-  renderMindfulness();
-  renderCompras();
-  renderRachas();
-  renderAjustes();
-  auditar('app_iniciada', { version: SCHEMA_VERSION });
-
-  if (ajustes.voz){
-    setTimeout(() => {
-      const h = new Date().getHours();
-      const s = h<12?'Buenos días':h<20?'Buenas tardes':'Buenas noches';
-      hablar(`${s}${ajustes.nombre?' '+ajustes.nombre:''}. Soy Sportín. ¿Cómo va tu día?`);
-    }, 700);
-  }
-}
-
-iniciar();
-</script>
-</body>
-</html>
+function cerrarDraw
