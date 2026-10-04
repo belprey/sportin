@@ -362,7 +362,56 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   .gift-overlay p{font-size:13.5px}
 
 }
-
+/* ==== ROUND TIMER ==== */
+.round-overlay{position:fixed;inset:0;background:#1a0b0b;color:#f5e6d0;z-index:210;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 20px);
+  overflow-y:auto}
+.round-overlay.show{display:flex}
+.round-top{position:absolute;top:calc(env(safe-area-inset-top) + 16px);left:16px;right:16px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:2}
+.round-top .round-title{font-size:14px;color:#f5e6d0;font-weight:800;letter-spacing:.3px}
+.round-top .round-close{background:rgba(255,255,255,.1);color:#f5e6d0;border:none;
+  padding:9px 14px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700}
+.round-stage{position:relative;width:min(74vw,330px);height:min(74vw,330px);
+  display:flex;align-items:center;justify-content:center;margin:60px 0 24px;flex:none}
+.round-ring{position:absolute;width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,rgba(212,38,58,.5),rgba(245,184,0,.1));
+  border:2px solid rgba(245,184,0,.55);
+  transition:background .4s, border-color .4s, box-shadow .4s, transform .3s;
+  box-shadow:0 0 80px rgba(212,38,58,.4)}
+.round-overlay.running .round-ring{animation:roundPulse 1s ease-in-out infinite alternate}
+@keyframes roundPulse{from{transform:scale(.95)}to{transform:scale(1.02)}}
+.round-overlay.resting .round-ring{
+  background:radial-gradient(circle at 50% 40%,rgba(46,168,224,.5),rgba(46,168,224,.1));
+  border-color:rgba(46,168,224,.55);
+  box-shadow:0 0 80px rgba(46,168,224,.35);animation:none;transform:scale(.95)}
+.round-overlay.done .round-ring{
+  background:radial-gradient(circle at 50% 40%,rgba(34,181,115,.6),rgba(34,181,115,.15));
+  border-color:rgba(34,181,115,.7);
+  box-shadow:0 0 80px rgba(34,181,115,.5);animation:none;transform:scale(1)}
+.round-center{position:relative;z-index:2;text-align:center;pointer-events:none}
+.round-fase{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px;color:#e8a8a8}
+.round-time{font-size:64px;font-weight:800;font-variant-numeric:tabular-nums;
+  line-height:1;letter-spacing:-3px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.4);
+  margin:6px 0}
+.round-round{font-size:12.5px;font-weight:700;letter-spacing:1.5px;color:#e8a8a8;text-transform:uppercase}
+.round-info{text-align:center;font-size:13px;color:#e8a8a8;line-height:1.5;max-width:340px;margin:0 0 20px}
+.round-info strong{color:#f5e6d0;display:block;margin-bottom:2px}
+.round-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.round-controls button{background:rgba(255,255,255,.12);color:#f5e6d0;border:none;
+  padding:14px 22px;border-radius:14px;font-family:inherit;font-weight:800;
+  font-size:14.5px;cursor:pointer;transition:.15s}
+.round-controls button:active{transform:scale(.95)}
+.round-controls button.primary{background:linear-gradient(135deg,#d4263a,#f5b800);color:#fff;
+  box-shadow:0 8px 22px rgba(212,38,58,.4)}
+.round-durations{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.round-durations button{background:rgba(255,255,255,.08);color:#c9b9b9;border:1px solid rgba(255,255,255,.1);
+  padding:8px 14px;border-radius:10px;font-family:inherit;font-weight:700;
+  font-size:12.5px;cursor:pointer;transition:.15s}
+.round-durations button.on{background:rgba(245,184,0,.25);color:#f5b800;border-color:rgba(245,184,0,.5)}
+.round-durations button:active{transform:scale(.95)}
+  
 </style>
 </head>
 <body>
@@ -755,6 +804,40 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     <button class="primary" id="bPlay">▶ Empezar</button>
     <button id="bStop">⏹ Detener</button>
   </div>
+  <!-- ============ TEMPORIZADOR DE ROUND ============ -->
+<div class="round-overlay" id="roundOverlay">
+  <div class="round-top">
+    <div class="round-title" id="rTitle">Round</div>
+    <button class="round-close" id="rClose">✕ Salir</button>
+  </div>
+  <div class="round-stage">
+    <div class="round-ring" id="rRing"></div>
+    <div class="round-center">
+      <div class="round-fase" id="rFase">Listo</div>
+      <div class="round-time" id="rTime">03:00</div>
+      <div class="round-round" id="rRoundNum"></div>
+    </div>
+  </div>
+  <div class="round-info" id="rInfo">
+    <strong>Elegí la duración</strong>
+    Campana al inicio y al final. Se registra solo.
+  </div>
+  <div class="round-controls" id="rControlsMain">
+    <button class="primary" id="rPlay">▶ Empezar round</button>
+    <button id="rStop">⏹ Detener</button>
+  </div>
+ <div class="round-controls" id="rControlsPost" style="display:none">
+    <button class="primary" id="rOtro">▶ Otro round</button>
+    <button id="rDesc">⏸ Descanso 1 min</button>
+    <button id="rFin">✓ Terminar</button>
+  </div>
+  <div class="round-durations" id="rDurations">
+    <button data-dur="120">2 min</button>
+    <button data-dur="180" class="on">3 min</button>
+    <button data-dur="240">4 min</button>
+    <button data-dur="300">5 min</button>
+  </div>
+</div>
 </div>
 
 <script>
@@ -1547,17 +1630,16 @@ $('#guardarComida').onclick = () => {
 const TIPOS_MOV = [
   { tipo:'sparring', label:'Sparring', em:'🥊' },
   { tipo:'bolsa', label:'Bolsa', em:'🥊' },
+  { tipo:'manoplas', label:'Manoplas', em:'🎯' },
   { tipo:'sombra', label:'Sombra', em:'👊' },
-  { tipo:'gym', label:'Gym', em:'🏋️' },
-  { tipo:'yoga', label:'Yoga', em:'🧘' },
-  { tipo:'bici', label:'Bici', em:'🚴' },
-  { tipo:'correr', label:'Correr', em:'🏃' },
-  { tipo:'saltar', label:'Saltar soga', em:'🪢' },
+  { tipo:'soga', label:'Soga', em:'🪢' },
+  { tipo:'pera', label:'Pera', em:'🥁' },
+  { tipo:'fisico', label:'Físico', em:'🏃' },
+  { tipo:'fuerza', label:'Fuerza', em:'💪' },
   { tipo:'estiramiento', label:'Estiramiento', em:'🤸' },
-  { tipo:'caminata', label:'Caminata', em:'🚶' },
-  { tipo:'baile', label:'Baile', em:'💃' },
   { tipo:'otro', label:'Otro', em:'🎯' }
 ];
+
 function renderMovimiento(){
   $('#movGrid').innerHTML = TIPOS_MOV.map(t => `
     <button class="mov-tipo" data-mov="${t.tipo}">
@@ -1566,7 +1648,7 @@ function renderMovimiento(){
     </button>
   `).join('');
   $('#movGrid').querySelectorAll('[data-mov]').forEach(b => {
-    b.onclick = () => abrirSheetMov(b.dataset.mov);
+    b.onclick = () => abrirRoundTimer(b.dataset.mov);
   });
 
   const hoy = Dominio.movimiento.porFecha();
@@ -1664,6 +1746,201 @@ $('#guardarMov').onclick = () => {
 };
 
 /* =====================================================================
+   TEMPORIZADOR DE ROUND
+   ===================================================================== */
+const roundSesion = {
+  drill: null,
+  duracionSeg: 180,
+  numRound: 1,
+  restanteSeg: 180,
+  estado: 'listo',       // listo | round | descanso | terminado
+  timerId: null
+};
+
+function bell(tipo){
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (Ctx){
+      const ctx = new Ctx();
+      const now = ctx.currentTime;
+      let tones;
+      if (tipo === 'end') tones = [{f:880,t:0},{f:880,t:0.32},{f:880,t:0.64},{f:1100,t:1.0}];
+      else if (tipo === 'start') tones = [{f:880,t:0},{f:1100,t:0.18}];
+      else tones = [{f:660,t:0}];
+      tones.forEach(({f,t}) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = f;
+        osc.type = 'sine';
+        osc.connect(gain); gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.0001, now+t);
+        gain.gain.exponentialRampToValueAtTime(0.22, now+t+0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now+t+0.55);
+        osc.start(now+t); osc.stop(now+t+0.6);
+      });
+      setTimeout(() => ctx.close(), 2200);
+    }
+  } catch(e){}
+  try {
+    if (navigator.vibrate){
+      navigator.vibrate(tipo === 'end' ? [220,120,220,120,220,120,320] : 220);
+    }
+  } catch(e){}
+}
+
+function fmtMMSS(seg){
+  seg = Math.max(0, seg);
+  const m = Math.floor(seg/60);
+  const s = seg % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function abrirRoundTimer(tipo){
+  const t = TIPOS_MOV.find(x => x.tipo === tipo) || { label: tipo, em: '🎯' };
+  roundSesion.drill = t;
+  roundSesion.numRound = 1;
+  roundSesion.estado = 'listo';
+  roundSesion.restanteSeg = roundSesion.duracionSeg;
+  clearInterval(roundSesion.timerId);
+
+  const ov = $('#roundOverlay');
+  ov.classList.add('show');
+  ov.classList.remove('resting','done','running');
+
+  $('#rTitle').textContent = `${t.em} ${t.label}`;
+  $('#rFase').textContent = 'Listo';
+  $('#rTime').textContent = fmtMMSS(roundSesion.duracionSeg);
+  $('#rRoundNum').textContent = '';
+  $('#rInfo').innerHTML = `<strong>Elegí la duración</strong>Campana al inicio y al final. Se registra solo.`;
+  $('#rControlsMain').style.display = 'flex';
+  $('#rControlsPost').style.display = 'none';
+  $('#rDurations').style.display = 'flex';
+
+  $('#rDurations').querySelectorAll('[data-dur]').forEach(b => {
+    b.classList.toggle('on', Number(b.dataset.dur) === roundSesion.duracionSeg);
+    b.onclick = () => {
+      roundSesion.duracionSeg = Number(b.dataset.dur);
+      roundSesion.restanteSeg = roundSesion.duracionSeg;
+      $('#rTime').textContent = fmtMMSS(roundSesion.duracionSeg);
+      $('#rDurations').querySelectorAll('[data-dur]').forEach(x => x.classList.toggle('on', x === b));
+    };
+  });
+
+  hablar(`Empezamos ${t.label}. Tocá empezar round cuando estés listo.`);
+}
+
+function iniciarRound(){
+  roundSesion.estado = 'round';
+  roundSesion.restanteSeg = roundSesion.duracionSeg;
+  const ov = $('#roundOverlay');
+  ov.classList.remove('resting','done');
+  ov.classList.add('running');
+
+  $('#rDurations').style.display = 'none';
+  $('#rControlsMain').style.display = 'none';
+  $('#rControlsPost').style.display = 'none';
+  $('#rFase').textContent = roundSesion.drill.label;
+  $('#rTime').textContent = fmtMMSS(roundSesion.restanteSeg);
+  $('#rRoundNum').textContent = `Round ${roundSesion.numRound}`;
+  $('#rInfo').innerHTML = `<strong>Round ${roundSesion.numRound} en curso</strong>Dale. Campana al final.`;
+
+  bell('start');
+  hablar(`Round ${roundSesion.numRound}.`);
+  correrCuenta();
+}
+
+function iniciarDescanso(){
+  roundSesion.estado = 'descanso';
+  roundSesion.restanteSeg = 60;
+  const ov = $('#roundOverlay');
+  ov.classList.add('resting');
+  ov.classList.remove('done','running');
+
+  $('#rFase').textContent = 'Descanso';
+  $('#rTime').textContent = fmtMMSS(60);
+  $('#rRoundNum').textContent = `Round ${roundSesion.numRound} completado`;
+  $('#rInfo').innerHTML = `<strong>Un minuto</strong>Respirá. El próximo round arranca solo.`;
+
+  bell('rest');
+  hablar('Descanso. Un minuto.');
+  correrCuenta();
+}
+
+function correrCuenta(){
+  clearInterval(roundSesion.timerId);
+  roundSesion.timerId = setInterval(() => {
+    roundSesion.restanteSeg--;
+    $('#rTime').textContent = fmtMMSS(roundSesion.restanteSeg);
+    if (roundSesion.restanteSeg <= 0){
+      clearInterval(roundSesion.timerId);
+      if (roundSesion.estado === 'round') terminarRound();
+      else if (roundSesion.estado === 'descanso') terminarDescanso();
+    }
+  }, 1000);
+}
+
+function terminarRound(){
+  roundSesion.estado = 'terminado';
+  bell('end');
+  const ov = $('#roundOverlay');
+  ov.classList.remove('running');
+  ov.classList.add('done');
+
+  $('#rFase').textContent = '¡Campana!';
+  $('#rTime').textContent = fmtMMSS(roundSesion.duracionSeg);
+  $('#rInfo').innerHTML = `<strong>Round ${roundSesion.numRound} listo</strong>¿Seguimos o cerramos?`;
+
+  const minutos = Math.max(1, Math.round(roundSesion.duracionSeg / 60));
+  Dominio.movimiento.guardar({
+    id: null,
+    fecha: hoyISO(),
+    tipo: roundSesion.drill.tipo,
+    nombre: `${roundSesion.drill.label} (round ${roundSesion.numRound})`,
+    dur: minutos,
+    int: 'alta',
+    notas: `Cronometrado · ${fmtMMSS(roundSesion.duracionSeg)}`
+  });
+
+  hablar(`Round ${roundSesion.numRound} completado y registrado.`);
+
+  $('#rControlsMain').style.display = 'none';
+  $('#rControlsPost').style.display = 'flex';
+  $('#rDurations').style.display = 'none';
+}
+
+function terminarDescanso(){
+  bell('rest');
+  roundSesion.numRound++;
+  iniciarRound();
+}
+
+function cerrarRoundTimer(){
+  clearInterval(roundSesion.timerId);
+  const ov = $('#roundOverlay');
+  ov.classList.remove('show','resting','done','running');
+  roundSesion.estado = 'listo';
+}
+
+$('#rClose').onclick = () => {
+  cerrarRoundTimer();
+  renderMovimiento(); renderHoy(); renderRachas();
+};
+$('#rPlay').onclick = () => iniciarRound();
+$('#rStop').onclick = () => {
+  cerrarRoundTimer();
+  renderMovimiento(); renderHoy(); renderRachas();
+};
+$('#rOtro').onclick = () => {
+  roundSesion.numRound++;
+  iniciarRound();
+};
+$('#rDesc').onclick = () => iniciarDescanso();
+$('#rFin').onclick = () => {
+  cerrarRoundTimer();
+  renderMovimiento(); renderHoy(); renderRachas();
+};
+  
+  /* =====================================================================
    RENDER: MINDFULNESS
    ===================================================================== */
 function renderMindfulness(){
